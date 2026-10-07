@@ -1440,7 +1440,12 @@ fn build_electron_main_step() -> Result<()> {
             .args(["build", "--use-shared-renderer"])
             .env("NODE_ENV", "production")
             .env("FLUXER_DESKTOP_PRODUCTION", "true")
-            .env(DESKTOP_MODULES_ENV, "1"),
+            // Myserycord: the module system pulls renderer updates from the package
+            // origin, which this fork does not run. Opt in with FLUXER_MODULES=1.
+            .env(
+                DESKTOP_MODULES_ENV,
+                env_string(DESKTOP_MODULES_ENV).unwrap_or_default(),
+            ),
     )
 }
 
@@ -2834,7 +2839,7 @@ struct VelopackAssetIndexEntry {
 
 fn windows_package_config(build_channel: &str, arch: &str) -> Result<WindowsPackageConfig> {
     let (pack_id, pack_title, artifact_prefix, icon_dir) = match build_channel {
-        "stable" => ("fluxer_desktop", "Fluxer", "Fluxer", "icons-stable"),
+        "stable" => ("myserycord_desktop", "Myserycord", "Myserycord", "icons-stable"),
         "canary" => (
             "fluxer_desktop_canary",
             "Fluxer Canary",
@@ -2880,25 +2885,28 @@ fn package_app_windows_velopack_step() -> Result<()> {
         )
     })?;
     let vpk = find_velopack_cli()?;
-    let trusted_sign_file = PathBuf::from(require_env(VELOPACK_TRUSTED_SIGN_FILE_ENV).context(
-        "Velopack packaging requires the Trusted Signing metadata written by the write_windows_signing_metadata step. Windows packages are never produced unsigned.",
-    )?);
-    ensure!(
-        trusted_sign_file.is_file(),
-        "Velopack Trusted Signing metadata file is missing: {}",
-        trusted_sign_file.display()
-    );
+    // Myserycord: no Trusted Signing account, so the package is unsigned when the
+    // metadata file is not provided.
+    let trusted_sign_file = env_string(VELOPACK_TRUSTED_SIGN_FILE_ENV).map(PathBuf::from);
+    if let Some(file) = &trusted_sign_file {
+        ensure!(
+            file.is_file(),
+            "Velopack Trusted Signing metadata file is missing: {}",
+            file.display()
+        );
+    }
     let packaged = pack_and_validate_windows_velopack(
         &vpk,
         &config,
         &version,
         &arch,
         &pack_dir,
-        &trusted_sign_file,
+        trusted_sign_file.as_deref(),
     );
-    let metadata_removed = remove_file_if_exists(&trusted_sign_file);
+    if let Some(file) = &trusted_sign_file {
+        remove_file_if_exists(file)?;
+    }
     packaged?;
-    metadata_removed?;
     print_directory(&config.output_dir)
 }
 
@@ -2908,9 +2916,14 @@ fn pack_and_validate_windows_velopack(
     version: &str,
     arch: &str,
     pack_dir: &Path,
-    trusted_sign_file: &Path,
+    trusted_sign_file: Option<&Path>,
 ) -> Result<()> {
-    ensure_velopack_pack_supports(vpk, &["--azureTrustedSignFile"])?;
+    let mut sign_args: Vec<String> = Vec::new();
+    if let Some(file) = trusted_sign_file {
+        ensure_velopack_pack_supports(vpk, &["--azureTrustedSignFile"])?;
+        sign_args.push("--azureTrustedSignFile".to_string());
+        sign_args.push(file.to_string_lossy().into_owned());
+    }
 
     run_command(CommandSpec::new(vpk).args([
         "--yes",
@@ -2926,7 +2939,7 @@ fn pack_and_validate_windows_velopack(
         "--packTitle",
         config.pack_title,
         "--packAuthors",
-        "Fluxer Platform AB",
+        "lbxmb",
         "--shortcuts",
         "Desktop,StartMenu",
         "--runtime",
@@ -2937,9 +2950,7 @@ fn pack_and_validate_windows_velopack(
         config.output_dir.to_string_lossy().as_ref(),
         "--delta",
         "None",
-        "--azureTrustedSignFile",
-        trusted_sign_file.to_string_lossy().as_ref(),
-    ]))?;
+    ]).args(sign_args.iter().map(String::as_str)))?;
 
     validate_velopack_output(config, version, arch)?;
     remove_velopack_portable_archives(&config.output_dir)
@@ -6127,9 +6138,9 @@ export const CHANNEL_DISPLAY_NAME = BUILD_CHANNEL;\n"
     #[test]
     fn windows_package_config_tracks_channel_and_arch() {
         let stable = windows_package_config("stable", "x64").unwrap();
-        assert_eq!(stable.pack_id, "fluxer_desktop");
+        assert_eq!(stable.pack_id, "myserycord_desktop");
         assert_eq!(stable.runtime, "win-x64");
-        assert_eq!(stable.main_exe, "Fluxer.exe");
+        assert_eq!(stable.main_exe, "Myserycord.exe");
 
         let canary = windows_package_config("canary", "arm64").unwrap();
         assert_eq!(canary.pack_id, "fluxer_desktop_canary");

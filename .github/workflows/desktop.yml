@@ -1,0 +1,227 @@
+name: desktop
+
+# Myserycord desktop apps (Windows x64, Linux x64), built on the GitHub mirror like
+# LB-XMB/app: Forgejo has no Windows runner, and the desktop compiles native Windows
+# modules with MSVC. Push a tag such as v1.0.0 on Forgejo; the push mirror forwards it
+# here and the installers land on the GitHub release of that tag.
+#
+# Adapted from Fluxer's build-desktop.yaml without macOS, arm64, code signing, the
+# renderer module system and the pkgs.fluxer.com upload.
+on:
+  push:
+    tags: ['v*']
+  workflow_dispatch:
+    inputs:
+      version:
+        description: Version to build, for example 1.0.1
+        required: true
+
+permissions:
+  contents: write
+
+concurrency:
+  group: desktop-${{ github.ref }}
+  cancel-in-progress: true
+
+env:
+  BUILD_CHANNEL: stable
+  CHANNEL: stable
+  RELEASE_CHANNEL: stable
+  PUBLIC_RELEASE_CHANNEL: stable
+  RUST_TOOLCHAIN: "1.98.1"
+  CI_HELPER: cargo run --locked --quiet --manifest-path ${{ github.workspace }}/_ci/tools/ci/Cargo.toml -- build-desktop
+
+jobs:
+  meta:
+    # Forgejo also reads .github/workflows when .forgejo/workflows is missing; keep it off.
+    if: ${{ github.server_url == 'https://github.com' }}
+    runs-on: ubuntu-24.04
+    outputs:
+      version: ${{ steps.meta.outputs.version }}
+      tag: ${{ steps.meta.outputs.tag }}
+    steps:
+      - id: meta
+        run: |
+          set -eu
+          if [ -n "${{ inputs.version }}" ]; then VERSION="${{ inputs.version }}"; else VERSION="${GITHUB_REF_NAME#v}"; fi
+          case "$VERSION" in [0-9]*.[0-9]*.[0-9]*) ;; *) echo "Expected a semantic version, got $VERSION" >&2; exit 1 ;; esac
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+          echo "tag=v$VERSION" >> "$GITHUB_OUTPUT"
+
+  shared_assets:
+    name: Build shared renderer assets
+    needs: meta
+    runs-on: ubuntu-24.04
+    timeout-minutes: 60
+    env:
+      VERSION: ${{ needs.meta.outputs.version }}
+      BUILD_VERSION: ${{ needs.meta.outputs.version }}
+      PUBLIC_BUILD_VERSION: ${{ needs.meta.outputs.version }}
+      SOURCE_SHA: ${{ github.sha }}
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with: {path: _ci}
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with: {path: source}
+      - uses: dtolnay/rust-toolchain@02cb101ec7c40f2c49e1d9714d64511d8e1b74de
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+          targets: wasm32-unknown-unknown
+      - name: Set workdir
+        env: {SUBST_TARGET: "${{ github.workspace }}/source"}
+        run: ${{ env.CI_HELPER }} --step set_workdir_unix
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with: {node-version: 26}
+      - run: ${{ env.CI_HELPER }} --step setup_pnpm
+      - run: ${{ env.CI_HELPER }} --step resolve_pnpm_store_unix
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ${{ env.PNPM_STORE_PATH }}
+          key: ${{ runner.os }}-shared-pnpm-${{ hashFiles('source/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-shared-pnpm-
+      - working-directory: ${{ env.WORKDIR }}/fluxer_desktop
+        run: |
+          ${{ env.CI_HELPER }} --step install_dependencies
+          ${{ env.CI_HELPER }} --step update_version
+          ${{ env.CI_HELPER }} --step set_build_channel
+          ${{ env.CI_HELPER }} --step build_shared_assets
+      - run: ${{ env.CI_HELPER }} --step prepare_shared_assets
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: desktop-shared
+          path: source/desktop-shared-assets
+          if-no-files-found: error
+          retention-days: 1
+          compression-level: 0
+
+  build:
+    name: Build ${{ matrix.platform }} x64
+    needs: [meta, shared_assets]
+    runs-on: ${{ matrix.os }}
+    timeout-minutes: 180
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - {platform: linux, os: ubuntu-24.04}
+          - {platform: windows, os: windows-2025}
+    env:
+      VERSION: ${{ needs.meta.outputs.version }}
+      BUILD_VERSION: ${{ needs.meta.outputs.version }}
+      PUBLIC_BUILD_VERSION: ${{ needs.meta.outputs.version }}
+      SOURCE_SHA: ${{ github.sha }}
+      DESKTOP_PLATFORM: ${{ matrix.platform }}
+      DESKTOP_ARCH: x64
+      PLATFORM: ${{ matrix.platform }}
+      ARCH: x64
+      ELECTRON_ARCH: x64
+    steps:
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with: {path: _ci}
+      - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1
+        with: {path: source}
+      - uses: dtolnay/rust-toolchain@02cb101ec7c40f2c49e1d9714d64511d8e1b74de
+        with:
+          toolchain: ${{ env.RUST_TOOLCHAIN }}
+          targets: ${{ matrix.platform == 'linux' && 'x86_64-unknown-linux-gnu' || '' }}
+
+      - name: Windows toolchain
+        if: runner.os == 'Windows'
+        uses: actions/setup-python@5fda3b95a4ea91299a34e894583c3862153e4b97
+        with: {python-version: "3.14"}
+      - if: runner.os == 'Windows'
+        run: ${{ env.CI_HELPER }} --step ensure_python3_windows
+      - if: runner.os == 'Windows'
+        env: {SUBST_TARGET: "${{ github.workspace }}/source"}
+        run: ${{ env.CI_HELPER }} --step windows_paths
+      - if: runner.os != 'Windows'
+        env: {SUBST_TARGET: "${{ github.workspace }}/source"}
+        run: ${{ env.CI_HELPER }} --step set_workdir_unix
+
+      - uses: actions/setup-node@820762786026740c76f36085b0efc47a31fe5020
+        with: {node-version: 26}
+      - run: ${{ env.CI_HELPER }} --step setup_pnpm
+      - if: runner.os == 'Windows'
+        run: ${{ env.CI_HELPER }} --step resolve_pnpm_store_windows
+      - if: runner.os != 'Windows'
+        run: ${{ env.CI_HELPER }} --step resolve_pnpm_store_unix
+      - uses: actions/cache@55cc8345863c7cc4c66a329aec7e433d2d1c52a9
+        with:
+          path: ${{ env.PNPM_STORE_PATH }}
+          key: ${{ runner.os }}-x64-pnpm-${{ hashFiles('source/pnpm-lock.yaml') }}
+          restore-keys: ${{ runner.os }}-x64-pnpm-
+
+      - if: matrix.platform == 'linux'
+        env: {DEBIAN_FRONTEND: noninteractive}
+        run: ${{ env.CI_HELPER }} --step install_linux_deps
+      - if: matrix.platform == 'windows'
+        uses: TheMrMilchmann/setup-msvc-dev@368ef7d1ee4d1171b31d4a7f67f4d954f903f5a9
+        with: {arch: amd64}
+      - if: matrix.platform == 'windows'
+        run: ${{ env.CI_HELPER }} --step install_rust_windows_targets
+
+      - working-directory: ${{ env.WORKDIR }}/fluxer_desktop
+        run: ${{ env.CI_HELPER }} --step install_dependencies
+      - working-directory: ${{ env.WORKDIR }}/fluxer_desktop
+        run: ${{ env.CI_HELPER }} --step update_version
+      - working-directory: ${{ env.WORKDIR }}/fluxer_desktop
+        run: ${{ env.CI_HELPER }} --step set_build_channel
+
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {name: desktop-shared, path: source/desktop-shared-assets}
+      - run: ${{ env.CI_HELPER }} --step restore_shared_assets
+      - working-directory: ${{ env.WORKDIR }}/fluxer_desktop
+        run: ${{ env.CI_HELPER }} --step build_electron_main
+
+      # Windows: unsigned build (no Azure Trusted Signing), packaged with Velopack.
+      - if: matrix.platform == 'windows'
+        uses: actions/setup-dotnet@a98b56852c35b8e3190ac28c8c2271da59106c68
+        with: {dotnet-version: "10.0.x"}
+      - if: matrix.platform == 'windows'
+        working-directory: ${{ env.WORKDIR }}/fluxer_desktop
+        run: ${{ env.CI_HELPER }} --step install_velopack_cli
+      - if: matrix.platform == 'windows'
+        working-directory: ${{ env.WORKDIR }}/fluxer_desktop
+        env: {TEMP: 'C:\t', TMP: 'C:\t', ELECTRON_BUILDER_CACHE: 'C:\ebcache'}
+        run: ${{ env.CI_HELPER }} --step build_app_windows
+      - if: matrix.platform == 'windows'
+        working-directory: ${{ env.WORKDIR }}/fluxer_desktop
+        run: ${{ env.CI_HELPER }} --step create_portable_zip_windows
+      - if: matrix.platform == 'windows'
+        working-directory: ${{ env.WORKDIR }}/fluxer_desktop
+        run: ${{ env.CI_HELPER }} --step package_app_windows_velopack
+      - if: runner.os == 'Windows'
+        run: ${{ env.CI_HELPER }} --step prepare_artifacts_windows
+
+      - if: matrix.platform == 'linux'
+        working-directory: ${{ env.WORKDIR }}/fluxer_desktop
+        env: {USE_SYSTEM_FPM: "true"}
+        run: ${{ env.CI_HELPER }} --step build_app_linux
+      - if: runner.os != 'Windows'
+        run: ${{ env.CI_HELPER }} --step prepare_artifacts_unix
+
+      - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: myserycord-${{ matrix.platform }}-x64
+          path: upload_staging
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
+
+  release:
+    name: Publish GitHub release
+    needs: [meta, build]
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093
+        with: {pattern: myserycord-*, path: dist, merge-multiple: true}
+      - name: Create or update the release
+        env:
+          GH_TOKEN: ${{ github.token }}
+          TAG: ${{ needs.meta.outputs.tag }}
+        run: |
+          set -eu
+          ls -la dist
+          gh release view "$TAG" -R "$GITHUB_REPOSITORY" >/dev/null 2>&1 \
+            || gh release create "$TAG" -R "$GITHUB_REPOSITORY" --title "Myserycord $TAG" --notes "Myserycord desktop $TAG (Windows x64 unsigned, Linux x64)." --target "$GITHUB_SHA"
+          gh release upload "$TAG" dist/* -R "$GITHUB_REPOSITORY" --clobber
