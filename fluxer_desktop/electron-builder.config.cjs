@@ -1697,9 +1697,9 @@ module.exports = {
 		darkModeSupport: true,
 		// Myserycord: without an Apple Developer certificate (CSC_LINK) the app is
 		// ad-hoc signed, not notarized and ships no provisioning profile.
-		...(macSigningConfigured ? {} : {identity: '-'}),
 		notarize: channel.notarize && macSigningConfigured,
 		sign: {
+			...(macSigningConfigured ? {} : {identity: '-'}),
 			hardenedRuntime: true,
 			...(channel.provisioningProfile && macSigningConfigured ? {provisioningProfile: channel.provisioningProfile} : {}),
 			entitlements: channel.macEntitlements,
