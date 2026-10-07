@@ -1,0 +1,28 @@
+# Myserycord: badges personnalisés, à côté des images officielles Fluxer.
+# Chargé via COMPOSE_FILE dans .env (fluxer-myserycord-patch l'y ajoute).
+services:
+  myserycord:
+    image: python:3.13-alpine
+    restart: ${FLUXER_RESTART_POLICY:-unless-stopped}
+    command: ["python3", "-u", "/app/server.py"]
+    working_dir: /app
+    environment:
+      FLUXER_ADMIN_SECRET_KEY_BASE: ${FLUXER_ADMIN_SECRET_KEY_BASE:?}
+      FLUXER_DOMAIN: ${FLUXER_DOMAIN:?}
+      FLUXER_API_ENDPOINT: http://api:8080
+    volumes:
+      - ./myserycord:/app:ro
+      - myserycord-data:/data
+    deploy:
+      resources:
+        limits:
+          memory: 64mb
+    healthcheck:
+      test: ["CMD", "wget", "-q", "-O", "/dev/null", "http://127.0.0.1:8080/myserycord/badges.json"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+    networks: [fluxer]
+
+volumes:
+  myserycord-data:

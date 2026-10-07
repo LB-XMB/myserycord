@@ -1,0 +1,46 @@
+#!/bin/sh
+# Myserycord: réapplique les ajouts au-dessus de l'install officielle (idempotent).
+#  - Caddyfile : bloc myserycord-begin/end (IP Cloudflare + routes des badges)
+#  - .env : COMPOSE_FILE charge myserycord.compose.yml
+#  - service myserycord démarré
+# Source : <repo>/deploy/myserycord, copié dans /root/fluxer/myserycord.
+set -eu
+cd /root/fluxer
+src=/root/fluxer/myserycord
+changed=0
+
+if ! grep -q "myserycord-begin" Caddyfile; then
+	bak="Caddyfile.bak-$(date +%Y%m%d%H%M%S)"
+	cp Caddyfile "$bak"
+	python3 - "$src/Caddyfile.snippet" <<"PY"
+import re, sys
+p = "/root/fluxer/Caddyfile"
+s = open(p).read()
+snippet = open(sys.argv[1]).read()
+# Ancien correctif CF seul (avant les badges) : on le remplace par le bloc complet.
+s = re.sub(r"\t# Myserycord: [^\n]*\n(\t#[^\n]*\n)*\t@cf header CF-Connecting-IP \*\n\trequest_header @cf X-Forwarded-For \{http.request.header.CF-Connecting-IP\}\n\n?", "", s)
+anchor = "{$FLUXER_EDGE_SITE_ADDRESS} {\n"
+assert s.count(anchor) == 1, "ancre Caddyfile introuvable"
+open(p, "w").write(s.replace(anchor, anchor + snippet))
+PY
+	changed=1
+	echo "Caddyfile: bloc myserycord appliqué"
+fi
+
+if ! grep -q "^COMPOSE_FILE=.*myserycord.compose.yml" .env; then
+	cp "$src/myserycord.compose.yml" myserycord.compose.yml
+	sed -i 's/^\(COMPOSE_FILE=.*\)$/\1:myserycord.compose.yml/' .env
+	grep -q "^COMPOSE_FILE=.*myserycord.compose.yml" .env || { echo "COMPOSE_FILE absent de .env"; exit 1; }
+	echo ".env: myserycord.compose.yml ajouté à COMPOSE_FILE"
+fi
+cmp -s "$src/myserycord.compose.yml" myserycord.compose.yml || cp "$src/myserycord.compose.yml" myserycord.compose.yml
+
+docker compose up -d myserycord
+if [ "$changed" = 1 ]; then
+	if ! docker compose exec -T edge caddy validate --config /etc/caddy/Caddyfile --adapter caddyfile; then
+		cat "$bak" > Caddyfile
+		echo "Caddyfile invalide : $bak restauré"
+		exit 1
+	fi
+	docker compose restart edge
+fi
