@@ -13,9 +13,10 @@
 
 name: images
 
+# Only on a new version: push a tag such as v1.0.0, or run it by hand from the Actions tab.
 on:
   push:
-    branches: [main]
+    tags: ['v*']
   workflow_dispatch:
 
 jobs:
@@ -62,9 +63,9 @@ jobs:
         run: |
           sha=$(git rev-parse --short=9 HEAD)
           ref="$REGISTRY/$OWNER/${{ matrix.image }}"
+          version="${{ github.ref_type == 'tag' && github.ref_name || '' }}"
           docker build -f "${{ matrix.dockerfile }}" ${{ matrix.args }} \
-            --build-arg BUILD_VERSION="myserycord-$sha" \
+            --build-arg BUILD_VERSION="myserycord-${version:-$sha}" \
             --build-arg SOURCE_SHA="$(git rev-parse HEAD)" \
-            -t "$ref:$sha" -t "$ref:myserycord" .
-          docker push "$ref:$sha"
-          docker push "$ref:myserycord"
+            -t "$ref:$sha" -t "$ref:myserycord" ${version:+-t "$ref:$version"} .
+          docker push --all-tags "$ref"
