@@ -1,0 +1,10 @@
+[Unit]
+Description=Mise à jour Fluxer chaque lundi à 4h30
+
+[Timer]
+OnCalendar=Mon *-*-* 04:30:00
+RandomizedDelaySec=30min
+Persistent=true
+
+[Install]
+WantedBy=timers.target

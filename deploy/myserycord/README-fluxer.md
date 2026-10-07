@@ -126,6 +126,16 @@ docker compose up -d
 
 ## Mise à jour
 
+**Automatique** : le timer `fluxer-auto-update.timer` lance `/usr/local/sbin/fluxer-auto-update` chaque lundi vers 4h30 UTC (`Persistent=true`, donc rattrapé au démarrage s'il a été manqué). Le script :
+1. télécharge `install.sh` et vérifie sa somme sha256 ;
+2. lance `install.sh --update`, qui sauvegarde la base, les uploads et `.env` (prévoir quelques minutes d'arrêt), puis pull, recrée et vérifie ;
+3. réapplique le correctif `CF-Connecting-IP` du Caddyfile si la mise à jour l'a écrasé ;
+4. contrôle `/_health`.
+
+Logs : `journalctl -u fluxer-auto-update`. Lancer à la main : `systemctl start fluxer-auto-update`. Revenir en arrière : `sh /root/fluxer-install/install.sh --rollback --allow-root`.
+
+**Manuelle** :
+
 ```sh
 cd /root/fluxer && sh install.sh --update --allow-root
 cp <repo>/deploy/myserycord/Caddyfile Caddyfile && docker compose restart edge
