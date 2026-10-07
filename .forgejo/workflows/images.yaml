@@ -13,10 +13,9 @@
 
 name: images
 
-# Only on a new version: push a tag such as v1.0.0, or run it by hand from the Actions tab.
+# Manual only: Actions tab -> images -> Run workflow. Needed only when server-side
+# code changes (VIP badge, web client); desktop apps are built by desktop.yaml.
 on:
-  push:
-    tags: ['v*']
   workflow_dispatch:
 
 jobs:
