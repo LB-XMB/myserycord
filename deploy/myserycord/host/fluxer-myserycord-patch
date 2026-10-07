@@ -42,7 +42,5 @@ if [ "$changed" = 1 ]; then
 		echo "Caddyfile invalide : $bak restauré"
 		exit 1
 	fi
-	# reload sans coupure : un restart coupe les websockets (gateway + signalisation
-	# LiveKit) et désynchronise les salons vocaux.
-	docker compose exec -T edge caddy reload --config /etc/caddy/Caddyfile --adapter caddyfile
+	docker compose restart edge
 fi
