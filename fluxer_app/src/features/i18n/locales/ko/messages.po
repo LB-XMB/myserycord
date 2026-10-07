@@ -1396,7 +1396,7 @@ msgstr "{displayName}님이 친구 요청을 보냈습니다"
 #. Instance selector error shown when the instance speaks a protocol generation this client does not know. Domain is interpolated.
 #: src/features/auth/flow/instance_selector/InstanceDiscoveryFailure.ts:24
 msgid "{domain} runs a newer version of Fluxer than this app. Update Fluxer, then try again."
-msgstr "{domain}에서 더 최신 버전의 Fluxer를 사용 중입니다. Fluxer를 업데이트한 후 다시 시도하세요."
+msgstr "{domain}에서 더 최신 버전의 Myserycord를 사용 중입니다. Myserycord를 업데이트한 후 다시 시도하세요."
 
 #. Profile timezone difference text. duration is a localized hours/minutes phrase for how far ahead the target user's local time is.
 #: src/features/user/components/popouts/UserProfileShared.tsx:65
@@ -10682,7 +10682,7 @@ msgstr "메시지를 게시할 수 없습니다"
 #. Instance selector error shown when no Fluxer instance answered at the address. Domain is interpolated.
 #: src/features/auth/flow/instance_selector/InstanceDiscoveryFailure.ts:20
 msgid "Couldn't reach a Fluxer instance at {domain}. Check the address and that the instance is online."
-msgstr "{domain}에서 Fluxer 인스턴스에 연결할 수 없습니다. 주소를 확인하고 인스턴스가 온라인 상태인지 확인하세요."
+msgstr "{domain}에서 Myserycord 인스턴스에 연결할 수 없습니다. 주소를 확인하고 인스턴스가 온라인 상태인지 확인하세요."
 
 #. Title of the generic fallback error modal shown when reactivating a Plutonium subscription fails.
 #: src/features/app/components/dialogs/components/plutonium/hooks/useSubscriptionActions.ts:50
@@ -16217,12 +16217,12 @@ msgstr "플로리다"
 #. Placeholder for the product name input in the setup wizard.
 #: src/features/app/components/setup/SetupWizardSteps.tsx:178
 msgid "Fluxer"
-msgstr "Fluxer"
+msgstr "Myserycord"
 
 #. Status shown when browser sign-in status polling gives up after repeated failures.
 #: src/features/auth/flow/auth_login_core/AuthLoginBrowserStep.tsx:72
 msgid "Fluxer stopped checking whether the browser approved this sign-in. It didn't lose your code."
-msgstr "Fluxer가 브라우저에서 이 로그인을 승인했는지 확인을 중단했습니다. 코드는 잃지 않았습니다."
+msgstr "Myserycord가 브라우저에서 이 로그인을 승인했는지 확인을 중단했습니다. 코드는 잃지 않았습니다."
 
 #. Settings search synonym. Used to match this term when the user types it in the settings search bar.
 #: src/features/user/components/settings_utils/section_registry/AccessibilitySections.ts:179
@@ -26012,7 +26012,7 @@ msgstr "알림 일시 중지"
 #. Voice screen share menu preference that pauses the local stream preview while the app is unfocused.
 #: src/features/ui/action_menu/items/voice_participant_menu_data/shared.ts:28
 msgid "Pause preview when Fluxer isn’t focused"
-msgstr "Fluxer가 포커스되지 않았을 때 미리보기 일시 중지"
+msgstr "Myserycord가 포커스되지 않았을 때 미리보기 일시 중지"
 
 #. Description shown for the emoji toggle while reduced motion is active.
 #: src/features/user/components/modals/tabs/accessibility_tab/AnimationTab.tsx:81
@@ -30290,7 +30290,7 @@ msgstr "화면 공유 실패"
 #. Body shown when a failed screen share could not be fully stopped.
 #: src/features/voice/components/alerts/ScreenShareRollbackIncompleteModal.tsx:12
 msgid "Screen sharing failed, but Fluxer could not confirm that every capture path stopped. Stop sharing or disconnect from the call before continuing."
-msgstr "화면 공유에 실패했지만, 모든 캡처 경로가 중지되었는지 Fluxer가 확인할 수 없습니다. 계속하기 전에 공유를 중지하거나 통화 연결을 끊으세요."
+msgstr "화면 공유에 실패했지만, 모든 캡처 경로가 중지되었는지 Myserycord가 확인할 수 없습니다. 계속하기 전에 공유를 중지하거나 통화 연결을 끊으세요."
 
 #. Body of the screen-share-unsupported modal. Mentions specific browsers and OSes; keep all proper nouns intact.
 #: src/features/voice/components/alerts/ScreenShareUnsupportedModal.tsx:12
@@ -31061,7 +31061,7 @@ msgstr "자체 호스팅 모드 재정의"
 
 #: src/features/app/components/dialogs/components/PurchaseDisclaimer.tsx:91
 msgid "Self-serve refunds available within 3 days of payment, once every 30 days. Refunding a subscription cancels it. EU/EEA buyers waive the 14-day right of withdrawal at checkout to access content immediately. Use the in-app refund button instead of a chargeback. Chargebacks can permanently restrict your account. Stripe handles payment securely. We never see your full card number."
-msgstr "결제 후 3일 이내, 30일마다 한 번씩 직접 환불할 수 있습니다. 구독을 환불하면 구독이 취소됩니다. EU/EEA 구매자는 콘텐츠에 즉시 액세스하기 위해 결제 시 14일 철회 권리를 포기합니다. 차지백 대신 앱 내 환불 버튼을 사용하세요. 차지백은 계정을 영구적으로 제한할 수 있습니다. Stripe가 결제를 안전하게 처리하며, Fluxer는 고객님의 전체 카드 번호를 볼 수 없습니다."
+msgstr "결제 후 3일 이내, 30일마다 한 번씩 직접 환불할 수 있습니다. 구독을 환불하면 구독이 취소됩니다. EU/EEA 구매자는 콘텐츠에 즉시 액세스하기 위해 결제 시 14일 철회 권리를 포기합니다. 차지백 대신 앱 내 환불 버튼을 사용하세요. 차지백은 계정을 영구적으로 제한할 수 있습니다. Stripe가 결제를 안전하게 처리하며, Myserycord는 고객님의 전체 카드 번호를 볼 수 없습니다."
 
 #. Button or menu action label in the share theme modal. Keep it concise.
 #. Send-message button label in the voice message composer modal.
@@ -35233,7 +35233,7 @@ msgstr "새로운 음성 채널은 <0>{channelLabel}</0>의 권한, 사용자 �
 #. Setup wizard push relay consent step body.
 #: src/features/app/components/setup/SetupWizardSteps.tsx:355
 msgid "The official Fluxer mobile apps receive notifications through Fluxer's push relay, which hands them to Apple and Google. Self-hosted UnifiedPush and ntfy endpoints never reach the relay and need no agreement."
-msgstr "Fluxer 공식 모바일 앱은 Fluxer의 푸시 릴레이를 통해 알림을 수신하며, 이는 Apple 및 Google로 전달됩니다. 자체 호스팅된 UnifiedPush 및 ntfy 엔드포인트는 릴레이에 도달하지 않으며 별도의 동의가 필요하지 않습니다."
+msgstr "Myserycord 공식 모바일 앱은 Myserycord의 푸시 릴레이를 통해 알림을 수신하며, 이는 Apple 및 Google로 전달됩니다. 자체 호스팅된 UnifiedPush 및 ntfy 엔드포인트는 릴레이에 도달하지 않으며 별도의 동의가 필요하지 않습니다."
 
 #. Activity log detail row under a removed channel permission override, listing the permissions it explicitly allowed before it was removed. It describes the removed override. It does not mean these permissions are allowed now. A permission override is a channel-level exception to the permissions of a role or member. It allows or denies chosen permissions in one channel or category only. Use the same word for override as the channel permissions settings, such as Add override. {permissions} is a list of permission names joined into one phrase, for example "View channel and Send messages". A long list ends with a count, for example "View channel, Send messages, and 3 more permissions".
 #: src/features/guild/utils/guild_tabs/audit_log/AuditLogChannelMessages.ts:418
@@ -38805,7 +38805,7 @@ msgstr "시간 형식에 시스템 로캘 사용"
 #. Accessible label for the official Fluxer instance option.
 #: src/features/auth/flow/instance_selector/InstancePickerRows.tsx:24
 msgid "Use the official Fluxer instance"
-msgstr "공식 Fluxer 인스턴스 사용"
+msgstr "공식 Myserycord 인스턴스 사용"
 
 #. Settings search entry description. One-line summary of what the settings search entry controls.
 #: src/features/user/components/settings_utils/search_index/DesktopSettingsIndex.ts:175

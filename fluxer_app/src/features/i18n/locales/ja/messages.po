@@ -1396,7 +1396,7 @@ msgstr "{displayName}さんから友達リクエストが届きました"
 #. Instance selector error shown when the instance speaks a protocol generation this client does not know. Domain is interpolated.
 #: src/features/auth/flow/instance_selector/InstanceDiscoveryFailure.ts:24
 msgid "{domain} runs a newer version of Fluxer than this app. Update Fluxer, then try again."
-msgstr "{domain} はこのアプリより新しいバージョンの Fluxer を実行しています。Fluxer をアップデートしてから、もう一度お試しください。"
+msgstr "{domain} はこのアプリより新しいバージョンの Myserycord を実行しています。Myserycord をアップデートしてから、もう一度お試しください。"
 
 #. Profile timezone difference text. duration is a localized hours/minutes phrase for how far ahead the target user's local time is.
 #: src/features/user/components/popouts/UserProfileShared.tsx:65
@@ -10682,7 +10682,7 @@ msgstr "このメッセージを公開できませんでした"
 #. Instance selector error shown when no Fluxer instance answered at the address. Domain is interpolated.
 #: src/features/auth/flow/instance_selector/InstanceDiscoveryFailure.ts:20
 msgid "Couldn't reach a Fluxer instance at {domain}. Check the address and that the instance is online."
-msgstr "{domain} の Fluxer インスタンスに接続できませんでした。アドレスを確認し、インスタンスがオンラインであることを確認してください。"
+msgstr "{domain} の Myserycord インスタンスに接続できませんでした。アドレスを確認し、インスタンスがオンラインであることを確認してください。"
 
 #. Title of the generic fallback error modal shown when reactivating a Plutonium subscription fails.
 #: src/features/app/components/dialogs/components/plutonium/hooks/useSubscriptionActions.ts:50
@@ -16217,12 +16217,12 @@ msgstr "フロリダ州"
 #. Placeholder for the product name input in the setup wizard.
 #: src/features/app/components/setup/SetupWizardSteps.tsx:178
 msgid "Fluxer"
-msgstr "Fluxer"
+msgstr "Myserycord"
 
 #. Status shown when browser sign-in status polling gives up after repeated failures.
 #: src/features/auth/flow/auth_login_core/AuthLoginBrowserStep.tsx:72
 msgid "Fluxer stopped checking whether the browser approved this sign-in. It didn't lose your code."
-msgstr "Fluxer はブラウザでのサインイン承認の確認を停止しました。コードは失われていません。"
+msgstr "Myserycord はブラウザでのサインイン承認の確認を停止しました。コードは失われていません。"
 
 #. Settings search synonym. Used to match this term when the user types it in the settings search bar.
 #: src/features/user/components/settings_utils/section_registry/AccessibilitySections.ts:179
@@ -25661,7 +25661,7 @@ msgstr "OTP"
 #. IAR modal: body copy on the success step shown after a platform report is submitted. Reassures the user about follow-up.
 #: src/features/moderation/components/report_modal/IARModalCopy.ts:101
 msgid "Our safety team is reviewing it. We'll send you a DM and email once we've reached a verdict."
-msgstr "Fluxerの安全チームが内容を確認しています。結果が出ましたら、DMとメールでお知らせします。"
+msgstr "Myserycordの安全チームが内容を確認しています。結果が出ましたら、DMとメールでお知らせします。"
 
 #. Field label in the voice connection status popout. Shows WebRTC estimated available outgoing bandwidth.
 #: src/features/voice/components/voice_connection_status/shared.ts:120
@@ -26012,7 +26012,7 @@ msgstr "通知を一時停止"
 #. Voice screen share menu preference that pauses the local stream preview while the app is unfocused.
 #: src/features/ui/action_menu/items/voice_participant_menu_data/shared.ts:28
 msgid "Pause preview when Fluxer isn’t focused"
-msgstr "Fluxerがフォーカスされていないときはプレビューを一時停止"
+msgstr "Myserycordがフォーカスされていないときはプレビューを一時停止"
 
 #. Description shown for the emoji toggle while reduced motion is active.
 #: src/features/user/components/modals/tabs/accessibility_tab/AnimationTab.tsx:81
@@ -35233,7 +35233,7 @@ msgstr "新しいボイスチャンネルには、<0>{channelLabel}</0>の権限
 #. Setup wizard push relay consent step body.
 #: src/features/app/components/setup/SetupWizardSteps.tsx:355
 msgid "The official Fluxer mobile apps receive notifications through Fluxer's push relay, which hands them to Apple and Google. Self-hosted UnifiedPush and ntfy endpoints never reach the relay and need no agreement."
-msgstr "Fluxer公式モバイルアプリは、Fluxerのプッシュリレーを通じて通知を受け取ります。これはAppleおよびGoogleに通知を渡します。セルフホスト型のUnifiedPushおよびntfyエンドポイントは、リレーに到達せず、同意も不要です。"
+msgstr "Myserycord公式モバイルアプリは、Myserycordのプッシュリレーを通じて通知を受け取ります。これはAppleおよびGoogleに通知を渡します。セルフホスト型のUnifiedPushおよびntfyエンドポイントは、リレーに到達せず、同意も不要です。"
 
 #. Activity log detail row under a removed channel permission override, listing the permissions it explicitly allowed before it was removed. It describes the removed override. It does not mean these permissions are allowed now. A permission override is a channel-level exception to the permissions of a role or member. It allows or denies chosen permissions in one channel or category only. Use the same word for override as the channel permissions settings, such as Add override. {permissions} is a list of permission names joined into one phrase, for example "View channel and Send messages". A long list ends with a count, for example "View channel, Send messages, and 3 more permissions".
 #: src/features/guild/utils/guild_tabs/audit_log/AuditLogChannelMessages.ts:418
@@ -38805,7 +38805,7 @@ msgstr "時刻形式にシステムのロケールを使用"
 #. Accessible label for the official Fluxer instance option.
 #: src/features/auth/flow/instance_selector/InstancePickerRows.tsx:24
 msgid "Use the official Fluxer instance"
-msgstr "公式のFluxerインスタンスを使用"
+msgstr "公式のMyserycordインスタンスを使用"
 
 #. Settings search entry description. One-line summary of what the settings search entry controls.
 #: src/features/user/components/settings_utils/search_index/DesktopSettingsIndex.ts:175

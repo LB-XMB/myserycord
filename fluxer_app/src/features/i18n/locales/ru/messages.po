@@ -1396,7 +1396,7 @@ msgstr "{displayName} хочет добавить вас в друзья"
 #. Instance selector error shown when the instance speaks a protocol generation this client does not know. Domain is interpolated.
 #: src/features/auth/flow/instance_selector/InstanceDiscoveryFailure.ts:24
 msgid "{domain} runs a newer version of Fluxer than this app. Update Fluxer, then try again."
-msgstr "{domain} использует более новую версию Fluxer, чем это приложение. Обновите Fluxer и попробуйте снова."
+msgstr "{domain} использует более новую версию Myserycord, чем это приложение. Обновите Myserycord и попробуйте снова."
 
 #. Profile timezone difference text. duration is a localized hours/minutes phrase for how far ahead the target user's local time is.
 #: src/features/user/components/popouts/UserProfileShared.tsx:65
@@ -10682,7 +10682,7 @@ msgstr "Не удалось опубликовать это сообщение"
 #. Instance selector error shown when no Fluxer instance answered at the address. Domain is interpolated.
 #: src/features/auth/flow/instance_selector/InstanceDiscoveryFailure.ts:20
 msgid "Couldn't reach a Fluxer instance at {domain}. Check the address and that the instance is online."
-msgstr "Не удалось подключиться к экземпляру Fluxer по адресу {domain}. Проверьте адрес и убедитесь, что экземпляр в сети."
+msgstr "Не удалось подключиться к экземпляру Myserycord по адресу {domain}. Проверьте адрес и убедитесь, что экземпляр в сети."
 
 #. Title of the generic fallback error modal shown when reactivating a Plutonium subscription fails.
 #: src/features/app/components/dialogs/components/plutonium/hooks/useSubscriptionActions.ts:50
@@ -16217,12 +16217,12 @@ msgstr "Флорида"
 #. Placeholder for the product name input in the setup wizard.
 #: src/features/app/components/setup/SetupWizardSteps.tsx:178
 msgid "Fluxer"
-msgstr "Fluxer"
+msgstr "Myserycord"
 
 #. Status shown when browser sign-in status polling gives up after repeated failures.
 #: src/features/auth/flow/auth_login_core/AuthLoginBrowserStep.tsx:72
 msgid "Fluxer stopped checking whether the browser approved this sign-in. It didn't lose your code."
-msgstr "Fluxer перестал проверять, одобрил ли браузер этот вход. Ваш код не потерян."
+msgstr "Myserycord перестал проверять, одобрил ли браузер этот вход. Ваш код не потерян."
 
 #. Settings search synonym. Used to match this term when the user types it in the settings search bar.
 #: src/features/user/components/settings_utils/section_registry/AccessibilitySections.ts:179
@@ -26012,7 +26012,7 @@ msgstr "Приостанавливать уведомления"
 #. Voice screen share menu preference that pauses the local stream preview while the app is unfocused.
 #: src/features/ui/action_menu/items/voice_participant_menu_data/shared.ts:28
 msgid "Pause preview when Fluxer isn’t focused"
-msgstr "Приостанавливать предпросмотр, когда Fluxer не в фокусе"
+msgstr "Приостанавливать предпросмотр, когда Myserycord не в фокусе"
 
 #. Description shown for the emoji toggle while reduced motion is active.
 #: src/features/user/components/modals/tabs/accessibility_tab/AnimationTab.tsx:81
@@ -30290,7 +30290,7 @@ msgstr "Не удалось начать демонстрацию экрана"
 #. Body shown when a failed screen share could not be fully stopped.
 #: src/features/voice/components/alerts/ScreenShareRollbackIncompleteModal.tsx:12
 msgid "Screen sharing failed, but Fluxer could not confirm that every capture path stopped. Stop sharing or disconnect from the call before continuing."
-msgstr "Демонстрация экрана завершилась с ошибкой, но Fluxer не смог подтвердить, что все пути захвата остановлены. Остановите демонстрацию или отключитесь от звонка, прежде чем продолжить."
+msgstr "Демонстрация экрана завершилась с ошибкой, но Myserycord не смог подтвердить, что все пути захвата остановлены. Остановите демонстрацию или отключитесь от звонка, прежде чем продолжить."
 
 #. Body of the screen-share-unsupported modal. Mentions specific browsers and OSes; keep all proper nouns intact.
 #: src/features/voice/components/alerts/ScreenShareUnsupportedModal.tsx:12
@@ -35233,7 +35233,7 @@ msgstr "Новый голосовой канал будет использова
 #. Setup wizard push relay consent step body.
 #: src/features/app/components/setup/SetupWizardSteps.tsx:355
 msgid "The official Fluxer mobile apps receive notifications through Fluxer's push relay, which hands them to Apple and Google. Self-hosted UnifiedPush and ntfy endpoints never reach the relay and need no agreement."
-msgstr "Официальные мобильные приложения Fluxer получают уведомления через ретранслятор push-уведомлений Fluxer, который передает их Apple и Google. Локальные конечные точки UnifiedPush и ntfy никогда не достигают ретранслятора и не требуют согласия."
+msgstr "Официальные мобильные приложения Myserycord получают уведомления через ретранслятор push-уведомлений Myserycord, который передает их Apple и Google. Локальные конечные точки UnifiedPush и ntfy никогда не достигают ретранслятора и не требуют согласия."
 
 #. Activity log detail row under a removed channel permission override, listing the permissions it explicitly allowed before it was removed. It describes the removed override. It does not mean these permissions are allowed now. A permission override is a channel-level exception to the permissions of a role or member. It allows or denies chosen permissions in one channel or category only. Use the same word for override as the channel permissions settings, such as Add override. {permissions} is a list of permission names joined into one phrase, for example "View channel and Send messages". A long list ends with a count, for example "View channel, Send messages, and 3 more permissions".
 #: src/features/guild/utils/guild_tabs/audit_log/AuditLogChannelMessages.ts:418
@@ -38805,7 +38805,7 @@ msgstr "Использовать региональные настройки с�
 #. Accessible label for the official Fluxer instance option.
 #: src/features/auth/flow/instance_selector/InstancePickerRows.tsx:24
 msgid "Use the official Fluxer instance"
-msgstr "Использовать официальный экземпляр Fluxer"
+msgstr "Использовать официальный экземпляр Myserycord"
 
 #. Settings search entry description. One-line summary of what the settings search entry controls.
 #: src/features/user/components/settings_utils/search_index/DesktopSettingsIndex.ts:175

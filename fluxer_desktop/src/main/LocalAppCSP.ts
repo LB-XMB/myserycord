@@ -11,6 +11,7 @@ const FRAME_SOURCES: ReadonlyArray<string> = Object.freeze([
 
 const IMAGE_SOURCES: ReadonlyArray<string> = Object.freeze([
 	'https://*.fluxer.app',
+	'https://fluxer.lbxmb.fr',
 	'https://i.ytimg.com',
 	'https://*.youtube.com',
 	'https://*.fluxer.media',
@@ -19,27 +20,31 @@ const IMAGE_SOURCES: ReadonlyArray<string> = Object.freeze([
 
 const MEDIA_SOURCES: ReadonlyArray<string> = Object.freeze([
 	'https://*.fluxer.app',
+	'https://fluxer.lbxmb.fr',
 	'https://*.youtube.com',
 	'https://*.fluxer.media',
 	'https://fluxer.media',
 ]);
 
-const SCRIPT_SOURCES: ReadonlyArray<string> = Object.freeze(['https://*.fluxer.app']);
+const SCRIPT_SOURCES: ReadonlyArray<string> = Object.freeze(['https://*.fluxer.app', 'https://fluxer.lbxmb.fr']);
 
 const STYLE_SOURCES: ReadonlyArray<string> = Object.freeze([
 	'https://*.fluxer.app',
+	'https://fluxer.lbxmb.fr',
 	'https://fonts.googleapis.com',
 	'https://api.fonts.coollabs.io',
 ]);
 
 const FONT_SOURCES: ReadonlyArray<string> = Object.freeze([
 	'https://*.fluxer.app',
+	'https://fluxer.lbxmb.fr',
 	'https://fonts.gstatic.com',
 	'https://api.fonts.coollabs.io',
 ]);
 
 const CONNECT_SOURCES: ReadonlyArray<string> = Object.freeze([
 	'https://*.fluxer.app',
+	'https://fluxer.lbxmb.fr',
 	'wss://*.fluxer.app',
 	'https://*.fluxer.media',
 	'wss://*.fluxer.media',
@@ -56,7 +61,7 @@ const LOOPBACK_HTTP_SOURCES: ReadonlyArray<string> = Object.freeze([
 
 const WORKER_SOURCES: ReadonlyArray<string> = Object.freeze(['https://*.fluxer.app', 'blob:']);
 
-const MANIFEST_SOURCES: ReadonlyArray<string> = Object.freeze(['https://*.fluxer.app']);
+const MANIFEST_SOURCES: ReadonlyArray<string> = Object.freeze(['https://*.fluxer.app', 'https://fluxer.lbxmb.fr']);
 
 const SELF_SOURCE = "'self'";
 const NONE_SOURCE = "'none'";

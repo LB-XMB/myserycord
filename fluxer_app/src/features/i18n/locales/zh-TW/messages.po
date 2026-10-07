@@ -1396,7 +1396,7 @@ msgstr "{displayName} 傳送了好友邀請給您"
 #. Instance selector error shown when the instance speaks a protocol generation this client does not know. Domain is interpolated.
 #: src/features/auth/flow/instance_selector/InstanceDiscoveryFailure.ts:24
 msgid "{domain} runs a newer version of Fluxer than this app. Update Fluxer, then try again."
-msgstr "{domain} 執行了比此應用程式更新版本的 Fluxer。請更新 Fluxer，然後再試一次。"
+msgstr "{domain} 執行了比此應用程式更新版本的 Myserycord。請更新 Myserycord，然後再試一次。"
 
 #. Profile timezone difference text. duration is a localized hours/minutes phrase for how far ahead the target user's local time is.
 #: src/features/user/components/popouts/UserProfileShared.tsx:65
@@ -10682,7 +10682,7 @@ msgstr "無法發布此訊息"
 #. Instance selector error shown when no Fluxer instance answered at the address. Domain is interpolated.
 #: src/features/auth/flow/instance_selector/InstanceDiscoveryFailure.ts:20
 msgid "Couldn't reach a Fluxer instance at {domain}. Check the address and that the instance is online."
-msgstr "無法連線到 {domain} 的 Fluxer 執行個體。請檢查位址並確認執行個體已上線。"
+msgstr "無法連線到 {domain} 的 Myserycord 執行個體。請檢查位址並確認執行個體已上線。"
 
 #. Title of the generic fallback error modal shown when reactivating a Plutonium subscription fails.
 #: src/features/app/components/dialogs/components/plutonium/hooks/useSubscriptionActions.ts:50
@@ -16217,12 +16217,12 @@ msgstr "佛羅里達州"
 #. Placeholder for the product name input in the setup wizard.
 #: src/features/app/components/setup/SetupWizardSteps.tsx:178
 msgid "Fluxer"
-msgstr "Fluxer"
+msgstr "Myserycord"
 
 #. Status shown when browser sign-in status polling gives up after repeated failures.
 #: src/features/auth/flow/auth_login_core/AuthLoginBrowserStep.tsx:72
 msgid "Fluxer stopped checking whether the browser approved this sign-in. It didn't lose your code."
-msgstr "Fluxer 已停止檢查瀏覽器是否核准此登入。您的驗證碼並未遺失。"
+msgstr "Myserycord 已停止檢查瀏覽器是否核准此登入。您的驗證碼並未遺失。"
 
 #. Settings search synonym. Used to match this term when the user types it in the settings search bar.
 #: src/features/user/components/settings_utils/section_registry/AccessibilitySections.ts:179
@@ -26012,7 +26012,7 @@ msgstr "暫停通知"
 #. Voice screen share menu preference that pauses the local stream preview while the app is unfocused.
 #: src/features/ui/action_menu/items/voice_participant_menu_data/shared.ts:28
 msgid "Pause preview when Fluxer isn’t focused"
-msgstr "當 Fluxer 未取得焦點時暫停預覽"
+msgstr "當 Myserycord 未取得焦點時暫停預覽"
 
 #. Description shown for the emoji toggle while reduced motion is active.
 #: src/features/user/components/modals/tabs/accessibility_tab/AnimationTab.tsx:81
@@ -30290,7 +30290,7 @@ msgstr "螢幕分享失敗"
 #. Body shown when a failed screen share could not be fully stopped.
 #: src/features/voice/components/alerts/ScreenShareRollbackIncompleteModal.tsx:12
 msgid "Screen sharing failed, but Fluxer could not confirm that every capture path stopped. Stop sharing or disconnect from the call before continuing."
-msgstr "螢幕分享失敗，但 Fluxer 無法確認所有擷取路徑都已停止。請先停止分享或中斷通話連線，再繼續。"
+msgstr "螢幕分享失敗，但 Myserycord 無法確認所有擷取路徑都已停止。請先停止分享或中斷通話連線，再繼續。"
 
 #. Body of the screen-share-unsupported modal. Mentions specific browsers and OSes; keep all proper nouns intact.
 #: src/features/voice/components/alerts/ScreenShareUnsupportedModal.tsx:12
@@ -35233,7 +35233,7 @@ msgstr "新的語音頻道將會重複使用 <0>{channelLabel}</0> 的權限、�
 #. Setup wizard push relay consent step body.
 #: src/features/app/components/setup/SetupWizardSteps.tsx:355
 msgid "The official Fluxer mobile apps receive notifications through Fluxer's push relay, which hands them to Apple and Google. Self-hosted UnifiedPush and ntfy endpoints never reach the relay and need no agreement."
-msgstr "Fluxer 的官方行動應用程式會透過 Fluxer 的推播轉送服務接收通知，該服務會將通知傳送給 Apple 和 Google。自行託管的 UnifiedPush 和 ntfy 端點不會觸及轉送服務，也無需同意。"
+msgstr "Myserycord 的官方行動應用程式會透過 Myserycord 的推播轉送服務接收通知，該服務會將通知傳送給 Apple 和 Google。自行託管的 UnifiedPush 和 ntfy 端點不會觸及轉送服務，也無需同意。"
 
 #. Activity log detail row under a removed channel permission override, listing the permissions it explicitly allowed before it was removed. It describes the removed override. It does not mean these permissions are allowed now. A permission override is a channel-level exception to the permissions of a role or member. It allows or denies chosen permissions in one channel or category only. Use the same word for override as the channel permissions settings, such as Add override. {permissions} is a list of permission names joined into one phrase, for example "View channel and Send messages". A long list ends with a count, for example "View channel, Send messages, and 3 more permissions".
 #: src/features/guild/utils/guild_tabs/audit_log/AuditLogChannelMessages.ts:418
@@ -38805,7 +38805,7 @@ msgstr "使用系統地區設定來顯示時間格式"
 #. Accessible label for the official Fluxer instance option.
 #: src/features/auth/flow/instance_selector/InstancePickerRows.tsx:24
 msgid "Use the official Fluxer instance"
-msgstr "使用官方 Fluxer 伺服器"
+msgstr "使用官方 Myserycord 伺服器"
 
 #. Settings search entry description. One-line summary of what the settings search entry controls.
 #: src/features/user/components/settings_utils/search_index/DesktopSettingsIndex.ts:175

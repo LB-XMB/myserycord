@@ -17,6 +17,7 @@ pub mod user_flag_bits {
     pub const FRIENDLY_BOT: u64 = 1 << 4;
     pub const FRIENDLY_BOT_MANUAL_APPROVAL: u64 = 1 << 5;
     pub const SPAMMER: u64 = 1 << 6;
+    pub const VIP: u64 = 1 << 24;
     pub const HIGH_GLOBAL_RATE_LIMIT: u64 = 1 << 33;
     pub const DELETED: u64 = 1 << 34;
     pub const SELF_DELETED: u64 = 1 << 36;
@@ -57,6 +58,10 @@ pub const USER_FLAGS: &[U64Flag] = &[
     U64Flag {
         name: "SPAMMER",
         value: user_flag_bits::SPAMMER,
+    },
+    U64Flag {
+        name: "VIP",
+        value: user_flag_bits::VIP,
     },
     U64Flag {
         name: "HIGH_GLOBAL_RATE_LIMIT",

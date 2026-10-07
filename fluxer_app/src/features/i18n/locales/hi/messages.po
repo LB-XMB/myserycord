@@ -10682,7 +10682,7 @@ msgstr "यह संदेश प्रकाशित नहीं हो स�
 #. Instance selector error shown when no Fluxer instance answered at the address. Domain is interpolated.
 #: src/features/auth/flow/instance_selector/InstanceDiscoveryFailure.ts:20
 msgid "Couldn't reach a Fluxer instance at {domain}. Check the address and that the instance is online."
-msgstr "{domain} पर कोई Fluxer इंस्टेंस नहीं मिला। पता जांचें और सुनिश्चित करें कि इंस्टेंस ऑनलाइन है।"
+msgstr "{domain} पर कोई Myserycord इंस्टेंस नहीं मिला। पता जांचें और सुनिश्चित करें कि इंस्टेंस ऑनलाइन है।"
 
 #. Title of the generic fallback error modal shown when reactivating a Plutonium subscription fails.
 #: src/features/app/components/dialogs/components/plutonium/hooks/useSubscriptionActions.ts:50
@@ -16217,12 +16217,12 @@ msgstr "फ़्लोरिडा"
 #. Placeholder for the product name input in the setup wizard.
 #: src/features/app/components/setup/SetupWizardSteps.tsx:178
 msgid "Fluxer"
-msgstr "Fluxer"
+msgstr "Myserycord"
 
 #. Status shown when browser sign-in status polling gives up after repeated failures.
 #: src/features/auth/flow/auth_login_core/AuthLoginBrowserStep.tsx:72
 msgid "Fluxer stopped checking whether the browser approved this sign-in. It didn't lose your code."
-msgstr "Fluxer ने यह जांचना बंद कर दिया कि ब्राउज़र ने इस साइन-इन को मंजूरी दी है या नहीं। इसने आपका कोड नहीं खोया है।"
+msgstr "Myserycord ने यह जांचना बंद कर दिया कि ब्राउज़र ने इस साइन-इन को मंजूरी दी है या नहीं। इसने आपका कोड नहीं खोया है।"
 
 #. Settings search synonym. Used to match this term when the user types it in the settings search bar.
 #: src/features/user/components/settings_utils/section_registry/AccessibilitySections.ts:179
@@ -26012,7 +26012,7 @@ msgstr "सूचनाएं रोकें"
 #. Voice screen share menu preference that pauses the local stream preview while the app is unfocused.
 #: src/features/ui/action_menu/items/voice_participant_menu_data/shared.ts:28
 msgid "Pause preview when Fluxer isn’t focused"
-msgstr "जब Fluxer फ़ोकस में न हो तो प्रीव्यू रोकें"
+msgstr "जब Myserycord फ़ोकस में न हो तो प्रीव्यू रोकें"
 
 #. Description shown for the emoji toggle while reduced motion is active.
 #: src/features/user/components/modals/tabs/accessibility_tab/AnimationTab.tsx:81
@@ -30290,7 +30290,7 @@ msgstr "स्क्रीन शेयरिंग विफल रही"
 #. Body shown when a failed screen share could not be fully stopped.
 #: src/features/voice/components/alerts/ScreenShareRollbackIncompleteModal.tsx:12
 msgid "Screen sharing failed, but Fluxer could not confirm that every capture path stopped. Stop sharing or disconnect from the call before continuing."
-msgstr "स्क्रीन शेयरिंग विफल रही, लेकिन Fluxer यह पुष्टि नहीं कर सका कि हर कैप्चर पाथ बंद हो गया है। जारी रखने से पहले शेयरिंग रोकें या कॉल से डिस्कनेक्ट करें।"
+msgstr "स्क्रीन शेयरिंग विफल रही, लेकिन Myserycord यह पुष्टि नहीं कर सका कि हर कैप्चर पाथ बंद हो गया है। जारी रखने से पहले शेयरिंग रोकें या कॉल से डिस्कनेक्ट करें।"
 
 #. Body of the screen-share-unsupported modal. Mentions specific browsers and OSes; keep all proper nouns intact.
 #: src/features/voice/components/alerts/ScreenShareUnsupportedModal.tsx:12
@@ -35233,7 +35233,7 @@ msgstr "नया वॉइस चैनल <0>{channelLabel}</0> से अन�
 #. Setup wizard push relay consent step body.
 #: src/features/app/components/setup/SetupWizardSteps.tsx:355
 msgid "The official Fluxer mobile apps receive notifications through Fluxer's push relay, which hands them to Apple and Google. Self-hosted UnifiedPush and ntfy endpoints never reach the relay and need no agreement."
-msgstr "Fluxer के आधिकारिक मोबाइल ऐप, Fluxer के पुश रिले के ज़रिए सूचनाएं प्राप्त करते हैं, जो उन्हें Apple और Google को सौंपता है। सेल्फ-होस्टेड UnifiedPush और ntfy एंडपॉइंट कभी भी रिले तक नहीं पहुँचते और उन्हें किसी समझौते की आवश्यकता नहीं होती।"
+msgstr "Myserycord के आधिकारिक मोबाइल ऐप, Myserycord के पुश रिले के ज़रिए सूचनाएं प्राप्त करते हैं, जो उन्हें Apple और Google को सौंपता है। सेल्फ-होस्टेड UnifiedPush और ntfy एंडपॉइंट कभी भी रिले तक नहीं पहुँचते और उन्हें किसी समझौते की आवश्यकता नहीं होती।"
 
 #. Activity log detail row under a removed channel permission override, listing the permissions it explicitly allowed before it was removed. It describes the removed override. It does not mean these permissions are allowed now. A permission override is a channel-level exception to the permissions of a role or member. It allows or denies chosen permissions in one channel or category only. Use the same word for override as the channel permissions settings, such as Add override. {permissions} is a list of permission names joined into one phrase, for example "View channel and Send messages". A long list ends with a count, for example "View channel, Send messages, and 3 more permissions".
 #: src/features/guild/utils/guild_tabs/audit_log/AuditLogChannelMessages.ts:418
@@ -38805,7 +38805,7 @@ msgstr "समय फ़ॉर्मैट के लिए सिस्टम �
 #. Accessible label for the official Fluxer instance option.
 #: src/features/auth/flow/instance_selector/InstancePickerRows.tsx:24
 msgid "Use the official Fluxer instance"
-msgstr "आधिकारिक Fluxer इंस्टेंस का उपयोग करें"
+msgstr "आधिकारिक Myserycord इंस्टेंस का उपयोग करें"
 
 #. Settings search entry description. One-line summary of what the settings search entry controls.
 #: src/features/user/components/settings_utils/search_index/DesktopSettingsIndex.ts:175

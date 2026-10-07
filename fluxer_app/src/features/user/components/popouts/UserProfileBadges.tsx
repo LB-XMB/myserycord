@@ -17,6 +17,7 @@ import bugHunterBadgeUrl from '@app/media/images/badges/bug-hunter.svg';
 import partnerBadgeUrl from '@app/media/images/badges/partner.svg';
 import plutoniumBadgeUrl from '@app/media/images/badges/plutonium.svg';
 import staffBadgeUrl from '@app/media/images/badges/staff.svg';
+import vipBadgeUrl from '@app/media/images/badges/vip.svg';
 import {PublicUserFlags, UserPremiumTypes} from '@fluxer/constants/src/UserConstants';
 import {msg} from '@lingui/core/macro';
 import {useLingui} from '@lingui/react/macro';
@@ -29,6 +30,10 @@ const STAFF_DESCRIPTOR = msg({
 	message: '{productName} Staff',
 	comment:
 		'Short badge title in the user profile badges popout. Preserve {productName}; it is inserted by code. English locales use Title Case for official badge titles; other locales should use natural local capitalization.',
+});
+const VIP_DESCRIPTOR = msg({
+	message: '{productName} VIP',
+	comment: 'Myserycord custom badge title in the user profile badges popout. Preserve {productName}; it is inserted by code.',
 });
 const PARTNER_DESCRIPTOR = msg({
 	message: '{productName} Partner',
@@ -103,6 +108,14 @@ export const UserProfileBadges: React.FC<UserProfileBadgesProps> = observer(
 					iconUrl: staffBadgeUrl,
 					tooltip: i18n._(STAFF_DESCRIPTOR, {productName: PRODUCT_NAME}),
 					url: Routes.careers(),
+				});
+			}
+			if (user.flags & PublicUserFlags.VIP) {
+				result.push({
+					type: 'icon',
+					key: 'vip',
+					iconUrl: vipBadgeUrl,
+					tooltip: i18n._(VIP_DESCRIPTOR, {productName: PRODUCT_NAME}),
 				});
 			}
 			if (!selfHosted && user.flags & PublicUserFlags.PARTNER) {

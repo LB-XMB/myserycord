@@ -1396,7 +1396,7 @@ msgstr "{displayName} ส่งคำขอเป็นเพื่อนถึ�
 #. Instance selector error shown when the instance speaks a protocol generation this client does not know. Domain is interpolated.
 #: src/features/auth/flow/instance_selector/InstanceDiscoveryFailure.ts:24
 msgid "{domain} runs a newer version of Fluxer than this app. Update Fluxer, then try again."
-msgstr "{domain} ใช้ Fluxer เวอร์ชันที่ใหม่กว่าแอปนี้ โปรดอัปเดต Fluxer แล้วลองอีกครั้ง"
+msgstr "{domain} ใช้ Myserycord เวอร์ชันที่ใหม่กว่าแอปนี้ โปรดอัปเดต Myserycord แล้วลองอีกครั้ง"
 
 #. Profile timezone difference text. duration is a localized hours/minutes phrase for how far ahead the target user's local time is.
 #: src/features/user/components/popouts/UserProfileShared.tsx:65
@@ -10682,7 +10682,7 @@ msgstr "ไม่สามารถเผยแพร่ข้อความน
 #. Instance selector error shown when no Fluxer instance answered at the address. Domain is interpolated.
 #: src/features/auth/flow/instance_selector/InstanceDiscoveryFailure.ts:20
 msgid "Couldn't reach a Fluxer instance at {domain}. Check the address and that the instance is online."
-msgstr "ไม่สามารถเชื่อมต่อกับอินสแตนซ์ Fluxer ที่ {domain} ได้ โปรดตรวจสอบที่อยู่และตรวจสอบว่าอินสแตนซ์กำลังทำงานอยู่"
+msgstr "ไม่สามารถเชื่อมต่อกับอินสแตนซ์ Myserycord ที่ {domain} ได้ โปรดตรวจสอบที่อยู่และตรวจสอบว่าอินสแตนซ์กำลังทำงานอยู่"
 
 #. Title of the generic fallback error modal shown when reactivating a Plutonium subscription fails.
 #: src/features/app/components/dialogs/components/plutonium/hooks/useSubscriptionActions.ts:50
@@ -16217,12 +16217,12 @@ msgstr "ฟลอริดา"
 #. Placeholder for the product name input in the setup wizard.
 #: src/features/app/components/setup/SetupWizardSteps.tsx:178
 msgid "Fluxer"
-msgstr "Fluxer"
+msgstr "Myserycord"
 
 #. Status shown when browser sign-in status polling gives up after repeated failures.
 #: src/features/auth/flow/auth_login_core/AuthLoginBrowserStep.tsx:72
 msgid "Fluxer stopped checking whether the browser approved this sign-in. It didn't lose your code."
-msgstr "Fluxer หยุดตรวจสอบว่าเบราว์เซอร์อนุมัติการลงชื่อเข้านี้หรือไม่ ไม่ได้ลบโค้ดของคุณไป"
+msgstr "Myserycord หยุดตรวจสอบว่าเบราว์เซอร์อนุมัติการลงชื่อเข้านี้หรือไม่ ไม่ได้ลบโค้ดของคุณไป"
 
 #. Settings search synonym. Used to match this term when the user types it in the settings search bar.
 #: src/features/user/components/settings_utils/section_registry/AccessibilitySections.ts:179
@@ -26012,7 +26012,7 @@ msgstr "หยุดการแจ้งเตือนชั่วคราว
 #. Voice screen share menu preference that pauses the local stream preview while the app is unfocused.
 #: src/features/ui/action_menu/items/voice_participant_menu_data/shared.ts:28
 msgid "Pause preview when Fluxer isn’t focused"
-msgstr "หยุดแสดงตัวอย่างชั่วคราวเมื่อไม่ได้โฟกัสที่ Fluxer"
+msgstr "หยุดแสดงตัวอย่างชั่วคราวเมื่อไม่ได้โฟกัสที่ Myserycord"
 
 #. Description shown for the emoji toggle while reduced motion is active.
 #: src/features/user/components/modals/tabs/accessibility_tab/AnimationTab.tsx:81
@@ -30290,7 +30290,7 @@ msgstr "แชร์หน้าจอไม่สำเร็จ"
 #. Body shown when a failed screen share could not be fully stopped.
 #: src/features/voice/components/alerts/ScreenShareRollbackIncompleteModal.tsx:12
 msgid "Screen sharing failed, but Fluxer could not confirm that every capture path stopped. Stop sharing or disconnect from the call before continuing."
-msgstr "การแชร์หน้าจอขัดข้อง แต่ Fluxer ไม่สามารถยืนยันได้ว่าทุกเส้นทางการจับภาพหยุดทำงานแล้ว หยุดแชร์หน้าจอหรือออกจากสายก่อนดำเนินการต่อ"
+msgstr "การแชร์หน้าจอขัดข้อง แต่ Myserycord ไม่สามารถยืนยันได้ว่าทุกเส้นทางการจับภาพหยุดทำงานแล้ว หยุดแชร์หน้าจอหรือออกจากสายก่อนดำเนินการต่อ"
 
 #. Body of the screen-share-unsupported modal. Mentions specific browsers and OSes; keep all proper nouns intact.
 #: src/features/voice/components/alerts/ScreenShareUnsupportedModal.tsx:12
@@ -35233,7 +35233,7 @@ msgstr "ช่องเสียงใหม่จะใช้สิทธิ์
 #. Setup wizard push relay consent step body.
 #: src/features/app/components/setup/SetupWizardSteps.tsx:355
 msgid "The official Fluxer mobile apps receive notifications through Fluxer's push relay, which hands them to Apple and Google. Self-hosted UnifiedPush and ntfy endpoints never reach the relay and need no agreement."
-msgstr "แอปมือถือ Fluxer อย่างเป็นทางการจะได้รับการแจ้งเตือนผ่านรีเลย์การแจ้งเตือนของ Fluxer ซึ่งจะส่งต่อไปยัง Apple และ Google ส่วนจุดสิ้นสุด UnifiedPush และ ntfy ที่โฮสต์ด้วยตนเองจะไม่ถึงรีเลย์และไม่จำเป็นต้องมีข้อตกลง"
+msgstr "แอปมือถือ Myserycord อย่างเป็นทางการจะได้รับการแจ้งเตือนผ่านรีเลย์การแจ้งเตือนของ Myserycord ซึ่งจะส่งต่อไปยัง Apple และ Google ส่วนจุดสิ้นสุด UnifiedPush และ ntfy ที่โฮสต์ด้วยตนเองจะไม่ถึงรีเลย์และไม่จำเป็นต้องมีข้อตกลง"
 
 #. Activity log detail row under a removed channel permission override, listing the permissions it explicitly allowed before it was removed. It describes the removed override. It does not mean these permissions are allowed now. A permission override is a channel-level exception to the permissions of a role or member. It allows or denies chosen permissions in one channel or category only. Use the same word for override as the channel permissions settings, such as Add override. {permissions} is a list of permission names joined into one phrase, for example "View channel and Send messages". A long list ends with a count, for example "View channel, Send messages, and 3 more permissions".
 #: src/features/guild/utils/guild_tabs/audit_log/AuditLogChannelMessages.ts:418
@@ -38805,7 +38805,7 @@ msgstr "ใช้รูปแบบเวลาตามภาษาของร
 #. Accessible label for the official Fluxer instance option.
 #: src/features/auth/flow/instance_selector/InstancePickerRows.tsx:24
 msgid "Use the official Fluxer instance"
-msgstr "ใช้เซิร์ฟเวอร์ทางการของ Fluxer"
+msgstr "ใช้เซิร์ฟเวอร์ทางการของ Myserycord"
 
 #. Settings search entry description. One-line summary of what the settings search entry controls.
 #: src/features/user/components/settings_utils/search_index/DesktopSettingsIndex.ts:175
