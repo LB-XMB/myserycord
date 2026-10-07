@@ -2408,7 +2408,10 @@ impl DesktopBuildPlatform {
 }
 
 fn build_app_step(platform: DesktopBuildPlatform) -> Result<()> {
-    let macos_keychain = if matches!(platform, DesktopBuildPlatform::Macos) {
+    // Myserycord: macOS signing is optional; without CSC_LINK electron-builder ad-hoc signs.
+    let macos_keychain = if matches!(platform, DesktopBuildPlatform::Macos)
+        && env_string("CSC_LINK").is_some()
+    {
         Some(validate_macos_signing_env()?)
     } else {
         None

@@ -6,6 +6,7 @@ const os = require('node:os');
 const path = require('node:path');
 const {promisify} = require('node:util');
 const execFileAsync = promisify(execFile);
+const macSigningConfigured = Boolean(process.env.CSC_LINK || process.env.CSC_KEYCHAIN);
 const CHANNELS = {
 	stable: {
 		productName: 'Myserycord',
@@ -1694,10 +1695,13 @@ module.exports = {
 		minimumSystemVersion: macOSMinimumSystemVersion,
 		icon: `build_resources/${iconDir}/_compiled/AppIcon.icns`,
 		darkModeSupport: true,
-		notarize: channel.notarize,
+		// Myserycord: without an Apple Developer certificate (CSC_LINK) the app is
+		// ad-hoc signed, not notarized and ships no provisioning profile.
+		...(macSigningConfigured ? {} : {identity: '-'}),
+		notarize: channel.notarize && macSigningConfigured,
 		sign: {
 			hardenedRuntime: true,
-			...(channel.provisioningProfile ? {provisioningProfile: channel.provisioningProfile} : {}),
+			...(channel.provisioningProfile && macSigningConfigured ? {provisioningProfile: channel.provisioningProfile} : {}),
 			entitlements: channel.macEntitlements,
 			entitlementsInherit: 'build_resources/entitlements.mac.inherit.plist',
 		},
@@ -1712,11 +1716,11 @@ module.exports = {
 			},
 		],
 		extendInfo: {
-			NSMicrophoneUsageDescription: 'Fluxer needs access to your microphone to enable voice chat features.',
-			NSCameraUsageDescription: 'Fluxer needs access to your camera to enable video chat features.',
-			NSAppleEventsUsageDescription: 'Fluxer needs access to Apple Events for automation features.',
-			NSAudioCaptureUsageDescription: 'Fluxer captures audio from the screen or window you choose to share.',
-			NSScreenCaptureUsageDescription: 'Fluxer captures the screen or window you choose to share.',
+			NSMicrophoneUsageDescription: 'Myserycord needs access to your microphone to enable voice chat features.',
+			NSCameraUsageDescription: 'Myserycord needs access to your camera to enable video chat features.',
+			NSAppleEventsUsageDescription: 'Myserycord needs access to Apple Events for automation features.',
+			NSAudioCaptureUsageDescription: 'Myserycord captures audio from the screen or window you choose to share.',
+			NSScreenCaptureUsageDescription: 'Myserycord captures the screen or window you choose to share.',
 			...(buildChannel === 'development' ? {CFBundleIconName: 'AppIcon'} : {}),
 			NSLocalNetworkUsageDescription:
 				'Fluxer needs local network access to reach a Fluxer instance you host on your own network. It never scans your network or connects to devices you have not pointed it at.',
