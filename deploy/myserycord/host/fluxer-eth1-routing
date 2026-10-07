@@ -1,0 +1,9 @@
+#!/bin/sh
+# Policy routing eth1 (idempotent). La route par défaut principale reste sur eth0.
+IP=151.240.100.29
+GW=151.240.100.1
+ip route replace 151.240.100.0/24 dev eth1 src $IP table eth1rt 2>/dev/null
+ip route replace default via $GW dev eth1 table eth1rt 2>/dev/null
+ip rule show | grep -q "from $IP lookup eth1rt" || ip rule add from $IP table eth1rt priority 100
+ip rule show | grep -q "fwmark 0x1 lookup eth1rt" || ip rule add fwmark 0x1 table eth1rt priority 101
+exit 0

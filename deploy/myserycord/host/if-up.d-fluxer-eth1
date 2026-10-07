@@ -1,0 +1,7 @@
+#!/bin/sh
+# Quand eth1 remonte : réapplique le policy routing et recrée LiveKit
+# pour qu'il ré-annonce ses candidats ICE.
+[ "$IFACE" = "eth1" ] || exit 0
+/usr/local/sbin/fluxer-eth1-routing
+command -v docker >/dev/null && cd /root/fluxer && docker compose up -d --force-recreate livekit >/dev/null 2>&1 &
+exit 0

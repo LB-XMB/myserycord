@@ -1,0 +1,7 @@
+[Unit]
+Description=Fluxer eth1 watchdog (policy routing + LiveKit)
+After=network-online.target docker.service
+
+[Service]
+Type=oneshot
+ExecStart=/usr/local/sbin/fluxer-eth1-watch
