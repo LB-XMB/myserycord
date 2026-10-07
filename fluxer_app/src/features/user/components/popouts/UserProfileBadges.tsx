@@ -11,7 +11,6 @@ import {Tooltip} from '@app/features/ui/tooltip/Tooltip';
 import {handleExternalLinkClick} from '@app/features/ui/utils/NativeUtils';
 import styles from '@app/features/user/components/popouts/UserProfileBadges.module.css';
 import type {Profile} from '@app/features/user/models/Profile';
-import CustomBadges from '@app/features/user/state/CustomBadges';
 import type {User} from '@app/features/user/models/User';
 import * as DateUtils from '@app/features/user/utils/DateFormatting';
 import bugHunterBadgeUrl from '@app/media/images/badges/bug-hunter.svg';
@@ -100,7 +99,6 @@ export const UserProfileBadges: React.FC<UserProfileBadgesProps> = observer(
 		const showPremium = shouldShowPremiumFeatures();
 		const premiumInfoUrl = RuntimeConfig.premiumInfoUrl;
 		const plutoniumPageEnabled = PlutoniumPageRollout.enabled;
-		const customBadges = CustomBadges.forUser(user.id);
 		const badges = useMemo(() => {
 			const result: Array<Badge> = [];
 			if (user.flags & PublicUserFlags.STAFF) {
@@ -118,14 +116,6 @@ export const UserProfileBadges: React.FC<UserProfileBadgesProps> = observer(
 					key: 'vip',
 					iconUrl: vipBadgeUrl,
 					tooltip: i18n._(VIP_DESCRIPTOR, {productName: PRODUCT_NAME}),
-				});
-			}
-			for (const badge of customBadges) {
-				result.push({
-					type: 'icon',
-					key: `custom_${badge.id}`,
-					iconUrl: badge.iconUrl,
-					tooltip: badge.description ? `${badge.name} : ${badge.description}` : badge.name,
 				});
 			}
 			if (!selfHosted && user.flags & PublicUserFlags.PARTNER) {
@@ -196,7 +186,6 @@ export const UserProfileBadges: React.FC<UserProfileBadgesProps> = observer(
 			premiumInfoUrl,
 			plutoniumPageEnabled,
 			user.flags,
-			customBadges,
 			profile?.premiumType,
 			profile?.premiumSince,
 			profile?.premiumLifetimeSequence,

@@ -33,10 +33,7 @@ Internet ──WebRTC 7881/tcp 7882/udp──> 151.240.100.29 (pas de NAT, pas d
 | Fichier | Changement |
 |---|---|
 | `/root/fluxer/.env` | généré par l'installeur, plus : `FLUXER_EDGE_TRUSTED_PROXIES=192.168.1.101/32`, `FLUXER_LIVEKIT_USE_EXTERNAL_IP=false`, `FLUXER_LIVEKIT_NODE_IP=151.240.100.29` |
-| `/root/fluxer/Caddyfile` | bloc `myserycord-begin/end` : IP Cloudflare + routes des badges (voir plus bas). Original : `Caddyfile.orig` |
-| `/root/fluxer/.env` `COMPOSE_FILE` | `:myserycord.compose.yml` ajouté (service `myserycord`) |
-| `/root/fluxer/myserycord/` | copie de `deploy/myserycord/badges/` + `Caddyfile.snippet` + `myserycord.compose.yml` |
-| `/usr/local/sbin/fluxer-myserycord-patch` | réapplique le bloc Caddyfile, `COMPOSE_FILE` et démarre `myserycord` (idempotent) |
+| `/root/fluxer/Caddyfile` | `X-Forwarded-For` remplacé par `CF-Connecting-IP` (voir plus bas). Original : `Caddyfile.orig` |
 | `/etc/nftables.conf` | réécrit (`host/nftables.conf`). Original : `/etc/nftables.conf.orig-fluxer` |
 | `/etc/iproute2/rt_tables.d/eth1rt.conf` | `100 eth1rt` |
 | `/usr/local/sbin/fluxer-eth1-routing` | policy routing eth1 (idempotent) |
@@ -91,25 +88,7 @@ request_header @cf X-Forwarded-For {http.request.header.CF-Connecting-IP}
 
 Ne **pas** utiliser `FLUXER_CLIENT_IP_HEADER_NAME=cf-connecting-ip` : les appels internes (app-proxy → edge:8088) n'ont pas ce header et prennent un 403, donc le site renvoie 503 (testé).
 
-**`sh install.sh --update` rafraîchit le Caddyfile.** Après une mise à jour, lancer `fluxer-myserycord-patch` (l'auto-update le fait).
-
-## Badges personnalisés
-
-Les images restent les images officielles. Un petit service à côté, `myserycord` (`python:3.13-alpine`, stdlib seule, code dans `badges/`), ajoute les badges :
-
-- **Admin** : panel admin → *Badges* (lien ajouté sous *Users*), ou directement `https://fluxer.lbxmb.fr/admin/myserycord/`. On y crée un badge (nom, description, image PNG/WebP/GIF/SVG ≤ 256 Ko), puis on cherche un utilisateur (pseudo, ID ou e-mail) pour le lui attribuer. Accès : session du panel admin officiel avec l'ACL `user:update:flags` (ou `*`). Chaque modification est loggée (`docker compose logs myserycord`).
-- **Web / PWA** : Caddy fait passer les pages HTML de l'app par `myserycord`, qui ajoute `<script src="/myserycord/badges.js">`. Le script trouve les composants de badges du client officiel (prop `data-flx` en `…user-profile-badges`) et y ajoute les images.
-- **Desktop** : il embarque l'app du fork, qui lit `/myserycord/badges.json` nativement (`fluxer_app/src/features/user/state/CustomBadges.ts`).
-- **Données** : volume `fluxer_myserycord-data` (`badges.json` + `icons/`). À sauvegarder avec le reste.
-- **Si `myserycord` tombe** : Caddy repasse directement sur `app-proxy` / `admin` (`lb_policy first`). Le site marche, sans les badges.
-- **Si une mise à jour Fluxer renomme les `data-flx`** : les badges disparaissent du web sans rien casser. Adapter `badges.js`.
-
-Mettre à jour le service après un changement dans le repo :
-
-```sh
-scp deploy/myserycord/badges/* deploy/myserycord/Caddyfile.snippet deploy/myserycord/myserycord.compose.yml root@192.168.1.50:/root/fluxer/myserycord/
-ssh root@192.168.1.50 'cd /root/fluxer && docker compose restart myserycord'
-```
+**`sh install.sh --update` rafraîchit le Caddyfile.** Après une mise à jour, recopier `deploy/myserycord/Caddyfile` puis lancer `docker compose restart edge`.
 
 ## Cloudflare
 
@@ -130,7 +109,7 @@ curl -sS -i --http1.1 --max-time 5 -H 'Connection: Upgrade' -H 'Upgrade: websock
 
 ## Sauvegardes
 
-À garder hors du CT : `/root/fluxer/.env` (tous les secrets), le dump de la base, les volumes `fluxer_seaweedfs-data` et `fluxer_myserycord-data` (badges).
+À garder hors du CT : `/root/fluxer/.env` (tous les secrets), le dump de la base et le volume `fluxer_seaweedfs-data`.
 
 ```sh
 cd /root/fluxer && mkdir -p backups
@@ -150,7 +129,7 @@ docker compose up -d
 **Automatique** : le timer `fluxer-auto-update.timer` lance `/usr/local/sbin/fluxer-auto-update` chaque lundi vers 4h30 UTC (`Persistent=true`, donc rattrapé au démarrage s'il a été manqué). Le script :
 1. télécharge `install.sh` et vérifie sa somme sha256 ;
 2. lance `install.sh --update`, qui sauvegarde la base, les uploads et `.env` (prévoir quelques minutes d'arrêt), puis pull, recrée et vérifie ;
-3. lance `fluxer-myserycord-patch` : bloc Caddyfile (IP Cloudflare + badges), `COMPOSE_FILE`, service `myserycord` ;
+3. réapplique le correctif `CF-Connecting-IP` du Caddyfile si la mise à jour l'a écrasé ;
 4. contrôle `/_health`.
 
 Logs : `journalctl -u fluxer-auto-update`. Lancer à la main : `systemctl start fluxer-auto-update`. Revenir en arrière : `sh /root/fluxer-install/install.sh --rollback --allow-root`.
@@ -159,7 +138,7 @@ Logs : `journalctl -u fluxer-auto-update`. Lancer à la main : `systemctl start 
 
 ```sh
 cd /root/fluxer && sh install.sh --update --allow-root
-fluxer-myserycord-patch
+cp <repo>/deploy/myserycord/Caddyfile Caddyfile && docker compose restart edge
 ```
 
 ## Tout annuler
