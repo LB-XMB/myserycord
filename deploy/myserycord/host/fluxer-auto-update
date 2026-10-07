@@ -1,7 +1,9 @@
 #!/bin/sh
-# Met à jour Fluxer sur la dernière version officielle (install.sh --update fait
-# une sauvegarde base + uploads, pull, recrée et vérifie), puis réapplique le
-# correctif CF-Connecting-IP du Caddyfile, que --update écrase.
+# Met à jour Fluxer avec les images Myserycord (fork synchronisé chaque nuit sur
+# l'officiel, voir .forgejo/workflows/sync.yaml). install.sh --update fait une
+# sauvegarde base + uploads, pull, recrée et vérifie. Les fichiers de stack viennent
+# du commit officiel que contiennent nos images (étiquette myserycord.upstream).
+# Réapplique ensuite le correctif CF-Connecting-IP du Caddyfile, que --update écrase.
 set -eu
 cd /root/fluxer
 work=$(mktemp -d); trap "rm -rf $work" EXIT
@@ -9,7 +11,14 @@ curl -fsSL --proto =https -o "$work/install.sh" https://fluxer.dev/install.sh
 curl -fsSL --proto =https -o "$work/install.sh.sha256" https://fluxer.dev/install.sh.sha256
 [ "$(sha256sum "$work/install.sh" | cut -d" " -f1)" = "$(cut -d" " -f1 "$work/install.sh.sha256")" ] || { echo "checksum install.sh KO"; exit 1; }
 cp "$work/install.sh" /root/fluxer-install/install.sh
-sh /root/fluxer-install/install.sh --update --non-interactive --allow-root --dir /root/fluxer
+
+# Nos images (.env : FLUXER_REGISTRY, FLUXER_IMAGE_TAG=latest).
+registry=$(sed -n 's/^FLUXER_REGISTRY=//p' .env)
+docker pull --quiet "$registry/fluxer-api:latest" >/dev/null
+ref=$(docker image inspect "$registry/fluxer-api:latest" --format '{{index .Config.Labels "myserycord.upstream"}}')
+[ -n "$ref" ] || { echo "image sans étiquette myserycord.upstream"; exit 1; }
+echo "images $registry:latest, fichiers de stack officiels au commit $ref"
+sh /root/fluxer-install/install.sh --update --non-interactive --allow-root --dir /root/fluxer --ref "$ref"
 
 if ! grep -q "CF-Connecting-IP" Caddyfile; then
 	python3 - <<"PY"

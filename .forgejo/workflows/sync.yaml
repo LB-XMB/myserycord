@@ -1,0 +1,101 @@
+# Myserycord: keep the fork on the official Fluxer and rebuild the server images.
+#
+# Every night (and on demand): merge fluxerapp/fluxer main into main (see
+# tools/myserycord/sync-upstream.sh), push it, and when main moved since the last
+# build, build the 12 Fluxer images and push them to the Forgejo registry as :latest
+# and :<sha>. The server's weekly fluxer-auto-update pulls :latest.
+#
+# Repo settings needed:
+#   secrets.REGISTRY_USER   Forgejo user allowed to write packages for lbxmb
+#   secrets.REGISTRY_TOKEN  token of that user with the write:package scope
+#   vars.REGISTRY           optional, default 192.168.1.14:3000 (LAN, avoids the
+#                           Cloudflare 100 MB request cap on git.lbxmb.fr)
+#
+# The job runs on the runner's Docker daemon through its socket, so that daemon has to
+# list the registry under "insecure-registries" when it is plain HTTP.
+
+name: sync
+
+on:
+  schedule:
+    - cron: "15 2 * * *"
+  workflow_dispatch:
+    inputs:
+      force:
+        description: Rebuild the images even if main did not move
+        type: boolean
+        default: false
+
+jobs:
+  sync:
+    runs-on: docker
+    timeout-minutes: 360
+    container:
+      image: docker:29-cli
+      volumes:
+        - /var/run/docker.sock:/var/run/docker.sock
+    env:
+      REGISTRY: ${{ vars.REGISTRY || '192.168.1.14:3000' }}
+      OWNER: lbxmb
+      GIT_HOST: ${{ vars.GIT_HOST || '192.168.1.14:3000' }}
+    steps:
+      # docker:cli has no node, so actions/checkout cannot run: clone by hand.
+      - name: merge upstream
+        run: |
+          apk add --no-cache git python3 >/dev/null
+          git clone --quiet --branch main \
+            "http://oauth2:${{ github.token }}@$GIT_HOST/${{ github.repository }}.git" src
+          cd src
+          git config user.name "myserycord-sync"
+          git config user.email "sync@lbxmb.fr"
+          sh tools/myserycord/sync-upstream.sh | tail -1 > ../upstream-sha
+          git push --quiet origin main
+          git log --oneline -3
+
+      - name: build and push images
+        working-directory: src
+        run: |
+          sha=$(git rev-parse --short=9 HEAD)
+          upstream=$(cat ../upstream-sha)
+          echo "${{ secrets.REGISTRY_TOKEN }}" | docker login "$REGISTRY" -u "${{ secrets.REGISTRY_USER }}" --password-stdin
+          built=$(docker image inspect "$REGISTRY/$OWNER/fluxer-api:latest" \
+            --format '{{index .Config.Labels "myserycord.source"}}' 2>/dev/null || true)
+          if [ "$built" = "$(git rev-parse HEAD)" ] && [ "${{ inputs.force }}" != "true" ]; then
+            echo "images already built from $sha"
+            exit 0
+          fi
+          images="
+          fluxer-api fluxer_api/Dockerfile
+          fluxer-app-proxy-self-hosted fluxer_app_proxy/Dockerfile --build-arg FLUXER_SELF_HOSTED=true
+          fluxer-admin fluxer_admin/Dockerfile
+          fluxer-gateway fluxer_gateway/Dockerfile
+          fluxer-users fluxer_users/Dockerfile
+          fluxer-messages fluxer_messages/Dockerfile
+          fluxer-snowflakes fluxer_snowflakes/Dockerfile
+          fluxer-push fluxer_push/Dockerfile
+          fluxer-media-proxy fluxer_media_proxy/Dockerfile
+          fluxer-gifs fluxer_gifs/Dockerfile
+          fluxer-unfurl fluxer_unfurl/Dockerfile
+          fluxer-static fluxer_static/Dockerfile"
+          echo "$images" | while read -r image dockerfile args; do
+            [ -n "$image" ] || continue
+            echo "::group::$image"
+            docker build -f "$dockerfile" $args \
+              --build-arg BUILD_VERSION="myserycord-$sha" \
+              --build-arg SOURCE_SHA="$(git rev-parse HEAD)" \
+              --label myserycord.source="$(git rev-parse HEAD)" \
+              --label myserycord.upstream="$upstream" \
+              -t "$REGISTRY/$OWNER/$image:$sha" -t "$REGISTRY/$OWNER/$image:latest" . || exit 1
+            # ponytail: no build cache kept (29 GB free on the runner); every build is
+            # a full one. Keep the cache once the disk is bigger.
+            docker builder prune -af >/dev/null
+            echo "::endgroup::"
+          done
+          # Push only once all 12 built, so :latest never mixes two versions.
+          echo "$images" | while read -r image _; do
+            [ -n "$image" ] || continue
+            docker push --quiet "$REGISTRY/$OWNER/$image:$sha"
+            docker push --quiet "$REGISTRY/$OWNER/$image:latest"
+            docker rmi "$REGISTRY/$OWNER/$image:$sha" >/dev/null
+          done
+          docker image prune -f >/dev/null

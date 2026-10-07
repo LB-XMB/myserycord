@@ -124,22 +124,28 @@ docker run --rm -v fluxer_seaweedfs-data:/data -v "$PWD/backups:/backup" \
 docker compose up -d
 ```
 
-## Mise à jour
+## Images Myserycord et mises à jour
 
-**Automatique** : le timer `fluxer-auto-update.timer` lance `/usr/local/sbin/fluxer-auto-update` chaque lundi vers 4h30 UTC (`Persistent=true`, donc rattrapé au démarrage s'il a été manqué). Le script :
-1. télécharge `install.sh` et vérifie sa somme sha256 ;
-2. lance `install.sh --update`, qui sauvegarde la base, les uploads et `.env` (prévoir quelques minutes d'arrêt), puis pull, recrée et vérifie ;
-3. réapplique le correctif `CF-Connecting-IP` du Caddyfile si la mise à jour l'a écrasé ;
-4. contrôle `/_health`.
+Le serveur tourne sur les images du fork (`192.168.1.14:3000/lbxmb/fluxer-*:latest`), qui contiennent les changements Myserycord (badges personnalisés, nom). Elles suivent l'officiel :
 
-Logs : `journalctl -u fluxer-auto-update`. Lancer à la main : `systemctl start fluxer-auto-update`. Revenir en arrière : `sh /root/fluxer-install/install.sh --rollback --allow-root`.
+1. **Chaque nuit à 2h15 UTC**, le workflow Forgejo `sync` (`.forgejo/workflows/sync.yaml`) :
+   - merge `fluxerapp/fluxer` `main` dans `main` (`tools/myserycord/sync-upstream.sh`). Les workflows upstream restent supprimés et les `.po` sont rebrandés (`rebrand_po.py`) ;
+   - s'arrête sans rien pousser s'il y a un conflit ailleurs : il faut le résoudre à la main, le serveur reste sur les dernières images ;
+   - builde les 12 images si `main` a bougé, puis les pousse en `:latest` et `:<sha>`, avec les étiquettes `myserycord.source` (commit du fork) et `myserycord.upstream` (commit officiel inclus).
+2. **Chaque lundi vers 4h30 UTC**, `fluxer-auto-update` :
+   - tire `fluxer-api:latest` et lit `myserycord.upstream` ;
+   - lance `install.sh --update --ref <ce commit>` : sauvegarde (base, uploads, `.env`), fichiers de stack officiels au même commit que les images, pull, recréation, vérification. Prévoir quelques minutes d'arrêt ;
+   - réapplique le correctif `CF-Connecting-IP` du Caddyfile et contrôle `/_health`.
 
-**Manuelle** :
+`.env` : `FLUXER_REGISTRY=192.168.1.14:3000/lbxmb`, `FLUXER_IMAGE_TAG=latest`. Le démon Docker de fluxxer liste `192.168.1.14:3000` dans `insecure-registries` (`/etc/docker/daemon.json`) et `docker login 192.168.1.14:3000` y est fait avec un jeton `read:package`.
 
-```sh
-cd /root/fluxer && sh install.sh --update --allow-root
-cp <repo>/deploy/myserycord/Caddyfile Caddyfile && docker compose restart edge
-```
+Logs : `journalctl -u fluxer-auto-update`. Lancer à la main : `systemctl start fluxer-auto-update`. Revenir en arrière : `sh /root/fluxer-install/install.sh --rollback --allow-root`. Revenir aux images officielles : retirer `FLUXER_REGISTRY` de `.env`, remettre `FLUXER_IMAGE_TAG=v1`, puis `sh /root/fluxer-install/install.sh --update --allow-root`.
+
+## Badges personnalisés
+
+Panel admin, entrée **Badges** (sous *Users*) : créer un badge (nom, description, image PNG/WebP/GIF/SVG ≤ 128 Kio), le donner (pseudo, `pseudo#0000`, ID ou e-mail), le reprendre, le modifier, le supprimer. Il faut l'ACL `user:update:flags` pour modifier (`user:lookup` pour voir).
+
+L'API stocke tout dans la table de configuration d'instance (clés `myserycord_custom_badge*`), sans migration. Elle sert la liste publique `GET /api/v1/myserycord/badges` et les images `GET /api/v1/myserycord/badges/<id>/icon`. Le web, la PWA et le desktop affichent les badges à côté des badges officiels (`CustomBadges.ts`). Code : `fluxer_api/src/api/myserycord/`, `fluxer_admin/src/routes/myserycord_badges.rs`.
 
 ## Tout annuler
 

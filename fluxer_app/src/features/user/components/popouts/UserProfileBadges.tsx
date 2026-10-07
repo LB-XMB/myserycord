@@ -12,12 +12,12 @@ import {handleExternalLinkClick} from '@app/features/ui/utils/NativeUtils';
 import styles from '@app/features/user/components/popouts/UserProfileBadges.module.css';
 import type {Profile} from '@app/features/user/models/Profile';
 import type {User} from '@app/features/user/models/User';
+import CustomBadges from '@app/features/user/state/CustomBadges';
 import * as DateUtils from '@app/features/user/utils/DateFormatting';
 import bugHunterBadgeUrl from '@app/media/images/badges/bug-hunter.svg';
 import partnerBadgeUrl from '@app/media/images/badges/partner.svg';
 import plutoniumBadgeUrl from '@app/media/images/badges/plutonium.svg';
 import staffBadgeUrl from '@app/media/images/badges/staff.svg';
-import vipBadgeUrl from '@app/media/images/badges/vip.svg';
 import {PublicUserFlags, UserPremiumTypes} from '@fluxer/constants/src/UserConstants';
 import {msg} from '@lingui/core/macro';
 import {useLingui} from '@lingui/react/macro';
@@ -30,10 +30,6 @@ const STAFF_DESCRIPTOR = msg({
 	message: '{productName} Staff',
 	comment:
 		'Short badge title in the user profile badges popout. Preserve {productName}; it is inserted by code. English locales use Title Case for official badge titles; other locales should use natural local capitalization.',
-});
-const VIP_DESCRIPTOR = msg({
-	message: '{productName} VIP',
-	comment: 'Myserycord custom badge title in the user profile badges popout. Preserve {productName}; it is inserted by code.',
 });
 const PARTNER_DESCRIPTOR = msg({
 	message: '{productName} Partner',
@@ -99,6 +95,7 @@ export const UserProfileBadges: React.FC<UserProfileBadgesProps> = observer(
 		const showPremium = shouldShowPremiumFeatures();
 		const premiumInfoUrl = RuntimeConfig.premiumInfoUrl;
 		const plutoniumPageEnabled = PlutoniumPageRollout.enabled;
+		const customBadges = CustomBadges.forUser(user.id);
 		const badges = useMemo(() => {
 			const result: Array<Badge> = [];
 			if (user.flags & PublicUserFlags.STAFF) {
@@ -110,12 +107,12 @@ export const UserProfileBadges: React.FC<UserProfileBadgesProps> = observer(
 					url: Routes.careers(),
 				});
 			}
-			if (user.flags & PublicUserFlags.VIP) {
+			for (const badge of customBadges) {
 				result.push({
 					type: 'icon',
-					key: 'vip',
-					iconUrl: vipBadgeUrl,
-					tooltip: i18n._(VIP_DESCRIPTOR, {productName: PRODUCT_NAME}),
+					key: `custom_${badge.id}`,
+					iconUrl: badge.iconUrl,
+					tooltip: badge.description ? `${badge.name} : ${badge.description}` : badge.name,
 				});
 			}
 			if (!selfHosted && user.flags & PublicUserFlags.PARTNER) {
@@ -186,6 +183,7 @@ export const UserProfileBadges: React.FC<UserProfileBadgesProps> = observer(
 			premiumInfoUrl,
 			plutoniumPageEnabled,
 			user.flags,
+			customBadges,
 			profile?.premiumType,
 			profile?.premiumSince,
 			profile?.premiumLifetimeSequence,

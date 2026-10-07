@@ -58,8 +58,6 @@ export const UserFlags = {
 	FRIENDLY_BOT_MANUAL_APPROVAL: 1n << 5n,
 	SPAMMER: 1n << 6n,
 	PROFILE_HIDDEN: 1n << 7n,
-	// Myserycord: badge perso. Bit < 31 (les flags publics passent en i32 côté Rust).
-	VIP: 1n << 24n,
 	DELETED: 1n << 34n,
 	SELF_DELETED: 1n << 36n,
 	DISABLED: 1n << 38n,
@@ -83,7 +81,6 @@ export const UserFlagsDescriptions: Record<keyof typeof UserFlags, string> = {
 	FRIENDLY_BOT_MANUAL_APPROVAL: 'Bot requires manual approval for friend requests',
 	SPAMMER: 'User is flagged as a spammer',
 	PROFILE_HIDDEN: 'User profile details are hidden from other users',
-	VIP: 'User has the Myserycord VIP badge',
 	DELETED: 'User account has been deleted',
 	SELF_DELETED: 'User account was self-deleted',
 	DISABLED: 'User account is disabled',
@@ -153,8 +150,7 @@ export const PUBLIC_USER_FLAGS =
 	UserFlags.BUG_HUNTER |
 	UserFlags.FRIENDLY_BOT |
 	UserFlags.FRIENDLY_BOT_MANUAL_APPROVAL |
-	UserFlags.SPAMMER |
-	UserFlags.VIP;
+	UserFlags.SPAMMER;
 export const DELETED_USER_USERNAME = 'DeletedUser';
 export const DELETED_USER_GLOBAL_NAME = 'Deleted User';
 export const DELETED_USER_DISCRIMINATOR = 0;
@@ -166,7 +162,6 @@ export const PublicUserFlags = {
 	FRIENDLY_BOT: Number(UserFlags.FRIENDLY_BOT),
 	FRIENDLY_BOT_MANUAL_APPROVAL: Number(UserFlags.FRIENDLY_BOT_MANUAL_APPROVAL),
 	SPAMMER: Number(UserFlags.SPAMMER),
-	VIP: Number(UserFlags.VIP),
 } as const;
 export const PublicUserFlagsDescriptions: Record<keyof typeof PublicUserFlags, string> = {
 	STAFF: 'User is a staff member',
@@ -175,7 +170,6 @@ export const PublicUserFlagsDescriptions: Record<keyof typeof PublicUserFlags, s
 	FRIENDLY_BOT: 'Bot accepts friend requests from users',
 	FRIENDLY_BOT_MANUAL_APPROVAL: 'Bot requires manual approval for friend requests',
 	SPAMMER: 'User is flagged as a spammer',
-	VIP: 'User has the Myserycord VIP badge',
 };
 export const ThemeTypes = {
 	DARK: 'dark',

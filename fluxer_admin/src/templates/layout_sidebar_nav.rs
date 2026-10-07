@@ -29,6 +29,7 @@ pub const NAV_SECTIONS: &[NavSection] = &[
         title: "Lookup",
         items: &[
             item!("Users", "/users", "users", [acl::USER_LOOKUP]),
+            item!("Badges", "/badges", "badges", [acl::USER_LOOKUP]),
             item!("Guilds", "/guilds", "guilds", [acl::GUILD_LOOKUP]),
             item!(
                 "Applications",

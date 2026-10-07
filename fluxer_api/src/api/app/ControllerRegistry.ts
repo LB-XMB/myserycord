@@ -20,6 +20,7 @@ import {GifController} from '@app/api/gif/GifController';
 import {GuildController} from '@app/api/guild/GuildController';
 import {InstanceController} from '@app/api/instance/InstanceController';
 import {InviteController} from '@app/api/invite/InviteController';
+import {CustomBadgesController} from '@app/api/myserycord/CustomBadgesController';
 import {OAuth2ApplicationsController} from '@app/api/oauth/OAuth2ApplicationsController';
 import {OAuth2Controller} from '@app/api/oauth/OAuth2Controller';
 import {OpenAPIController} from '@app/api/openapi/OpenAPIController';
@@ -56,6 +57,7 @@ export function registerControllers(routes: HonoApp, config: APIConfig): void {
 	FavoriteGifController(routes);
 	FavoriteMemeController(routes);
 	InviteController(routes);
+	CustomBadgesController(routes);
 	ReadStateController(routes);
 	ReportController(routes);
 	GuildController(routes);

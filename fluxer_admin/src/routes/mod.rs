@@ -13,6 +13,7 @@ pub mod guilds;
 pub mod jobs;
 mod message_actions;
 pub mod messages;
+pub mod myserycord_badges;
 pub mod reports;
 pub mod system;
 mod system_actions;
@@ -60,6 +61,7 @@ pub fn build_router(config: AdminConfig) -> Router {
     let state = AppState::new(config);
     let protected = Router::new()
         .merge(users::router())
+        .merge(myserycord_badges::router())
         .merge(guilds::router())
         .merge(reports::router())
         .merge(bans::router())
